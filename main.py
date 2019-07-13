@@ -1,4 +1,3 @@
-#!/var/www/_hidden_scripts/csgo_news_bot/venv/bin/python3.7
 # coding: utf8
 import requests
 import json
