@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 load_dotenv()
 
+PATH = os.path.dirname(os.path.abspath(__file__))
 
 class Parser():
     site = "https://www.hltv.org"
@@ -17,7 +18,7 @@ class Parser():
     }
     r = ''
     text = ''
-    file_name = 'events_items.json'
+    file_name = os.path.join(PATH, 'events_items.json')
     added_items = []
     list_output = []
 
