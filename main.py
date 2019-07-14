@@ -6,9 +6,11 @@ import datetime
 from bs4 import BeautifulSoup
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 PATH = os.path.dirname(os.path.abspath(__file__))
+
 
 class Parser():
     site = "https://www.hltv.org"
@@ -33,7 +35,6 @@ class Parser():
         self.r = requests.get(self.url, headers=self.headers)
         self.text = self.r.text
         self.main()
-
 
     def getFileName(self):
         now = datetime.datetime.now()
@@ -95,23 +96,26 @@ class Parser():
 
             }
 
-
             r = requests.get(self.site + href, headers=self.headers)
             text = r.text
             soup = BeautifulSoup(text, "html.parser")
 
             teams = soup.find('div', {"class": "standard-box teamsBox"}).find_all("div", {"class": "team"})
-
+            i = 0
             for team in teams:
                 current_item = {
-                    'score': team.find("div", {"class":["won","lost"]}).text,
-                    'title': team.find("img",{"class":"logo"})['title'],
+                    'score': team.find("div", {"class": ["won", "lost", "tie"]}).text,
+                    'title': team.find("img", {"class": "logo"})['title'],
                     'country': team.find("img", {"class": ["team1", "team2"]})['title'],
                 }
+
                 if team.find("div", {"class": "won"}):
                     one_match['teams']['winner'] = current_item
-                else:
+                elif team.find("div", {"class": "lost"}):
                     one_match['teams']['looser'] = current_item
+                elif team.find("div", {"class": "tie"}):
+                    one_match['teams'][f'tie{i}'] = current_item
+                i += 1
             self.list_output.append(one_match)
 
     def telegram_bot_sendtext(self, bot_message):
@@ -128,29 +132,59 @@ class Parser():
 
     def loop_result(self):
         for item in self.list_output:
+            trigger = False
+
             if item['id'] in self.added_items: continue
-            if self.filters(item['teams']['winner']['country']) or self.filters(item['teams']['looser']['country']):
+            try:
+                trigger = self.filters(item['teams']['tie0']['country']) or self.filters(item['teams']['tie1']['country'])
+            except:
+                pass
+
+            try:
+                trigger = self.filters(item['teams']['winner']['country']) or self.filters(item['teams']['looser']['country'])
+            except:
+                pass
+
+            if trigger:
                 self.handler(item)
                 self.added_items.append(item['id'])
 
     def get_message(self, item):
-        looser_hashtag = '' if item['teams']['winner']['country'] == item['teams']['winner']['country']  \
-        else self.get_hashtag(['teams']['looser']['country'])
+        looser_hashtag = ''
+        msg = ''
+        if item['teams'].get('winner', False):
+            if item['teams']['winner']['country'] == item['teams']['looser']['country']:
+                looser_hashtag = self.get_hashtag(item['teams']['looser']['country'])
+            msg = f"""
+{item['stars']}<b>{item['teams']['winner']['title']}</b> выйграла у {item['teams']['looser']['title']} 
+со счетом <b>{item['teams']['winner']['score']}</b> - {item['teams']['looser']['score']} ({item['type']}) 
+на турнире {item['event']}, подробнее <a href='{item['href']}'>здесь</a> \n\n
+{self.get_hashtag(item['teams']['winner']['title'])} 
+{self.get_hashtag(item['teams']['looser']['title'])} 
+{self.get_hashtag(item['type'])} 
+{self.get_hashtag(item['teams']['winner']['country'])} 
+{looser_hashtag}
+            """
 
-        msg = f"{item['stars']}<b>{item['teams']['winner']['title']}</b> выйграла у {item['teams']['looser']['title']} "
-        msg = msg + f"со счетом <b>{item['teams']['winner']['score']}</b> - {item['teams']['looser']['score']} ({item['type']}) "
-        msg = msg + f"на турнире {item['event']}, подробнее <a href='{item['href']}'>здесь</a> \n\n"
-        msg = msg + f"{self.get_hashtag(item['teams']['winner']['title'])} " \
-            f"{self.get_hashtag(item['teams']['looser']['title'])} " \
-            f"{self.get_hashtag(item['type'])} "\
-            f"{self.get_hashtag(item['teams']['winner']['country'])} "\
-            f"{looser_hashtag}"\
+        if item['teams'].get('tie0', False):
+            if item['teams']['tie0']['country'] == item['teams']['tie1']['country']:
+                looser_hashtag = self.get_hashtag(['teams']['tie1']['country'])
 
+            msg = f"""
+{item['stars']}<b>{item['teams']['tie0']['title']} и {item['teams']['tie1']['title']}</b> сыграли в ничью
+на турнире {item['event']}, подробнее <a href='{item['href']}'>здесь</a> \n\n
+{self.get_hashtag(item['teams']['tie0']['title'])} 
+{self.get_hashtag(item['teams']['tie1']['title'])} 
+{self.get_hashtag(item['type'])} 
+{self.get_hashtag(item['teams']['tie0']['country'])} 
+{looser_hashtag}
+"""
         return msg
 
     def filters(self, country):
         if country in self.countries_list:
             return True
         return False
+
 
 Parser()
