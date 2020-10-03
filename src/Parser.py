@@ -118,5 +118,5 @@ class Parser():
 {self.get_hashtag(item.getWinner().getCountry())} 
 {looser_hashtag}
             """
-        print(msg)
+
         return msg
