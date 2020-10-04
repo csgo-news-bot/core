@@ -1,41 +1,35 @@
 from typing import Set
 
-import requests
-import sys
 from bs4 import BeautifulSoup
 from src.entity.MatchEntity import MatchEntity
 from src.entity.TeamEntity import TeamEntity
 from src.service.ConfigService import ConfigService
 from src.service.CountryAllowSerivce import CountryAllowService
+from src.service.HttpClientService import HttpClientService
 from src.service.LatestMatchesService import LatestMatchesService
 from src.service.TelegramNotifierService import TelegramNotifierService
 
 
 class Parser():
-    site = "https://www.hltv.org"
-    url = site + "/results"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:45.0) Gecko/20100101 Firefox/45.0'
-    }
-    r = ''
-    text = ''
     added_items: Set = {}
     list_output = []
     config = None
+    latestMatchesService = None
+    telegramNotifierService = None
+    countryAllowService = None
+    httpClientService = None
 
     def __init__(self):
         self.config = ConfigService()
         self.latestMatchesService = LatestMatchesService()
         self.telegramNotifierService = TelegramNotifierService()
         self.countryAllowService = CountryAllowService()
+        self.httpClientService = HttpClientService()
 
     def execute(self):
-        self.r = requests.get(self.url, headers=self.headers)
-        self.text = self.r.text
-        self.main()
+        text = self.httpClientService.getHtmlPage(self.config.getHltvResultEndpoint())
 
-    def main(self):
-        soup = BeautifulSoup(self.text, "html.parser")
+        soup = BeautifulSoup(text, "html.parser")
         matches = soup.find_all('div', {'data-zonedgrouping-headline-classes': 'standard-headline'})
         if len(matches):
             matches2 = matches[0].find_all('div', {'class': 'results-sublist'})
@@ -67,14 +61,13 @@ class Parser():
 
             matchEntity = MatchEntity()
             matchEntity.setId(self.get_id(href))
-            matchEntity.setHref(self.site + href)
+            matchEntity.setHref(self.config.HLTV_SITE + href)
             matchEntity.setType(item.find('div', {'class': 'map-text'}).getText())
             matchEntity.setEvent(item.find('span', {'class': 'event-name'}).getText())
             matchEntity.setStars(self.get_stars(item))
 
-            r = requests.get(self.site + href, headers=self.headers)
-
-            soup = BeautifulSoup(r.text, "html.parser")
+            htmlPage = self.httpClientService.getHtmlPage(self.config.HLTV_SITE + href)
+            soup = BeautifulSoup(htmlPage, "html.parser")
 
             try:
                 teams = soup.find('div', {"class": "standard-box teamsBox"}).find_all("div", {"class": "team"})
@@ -105,7 +98,7 @@ class Parser():
     def get_message(self, item: MatchEntity):
         looser_hashtag = ''
 
-        if item.getWinner().getCountry() == item.getLooser().getCountry():
+        if item.getWinner().getCountry() != item.getLooser().getCountry():
             looser_hashtag = self.get_hashtag(item.getLooser().getCountry())
 
         msg = f"""

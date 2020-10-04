@@ -4,6 +4,7 @@ from os.path import dirname
 
 class ConfigService:
     LATEST_MATCHES_PATH = '/var/latest_matches.pickle'
+    HLTV_SITE = "https://www.hltv.org"
 
     def getAppPath(self) -> str:
         return dirname(dirname(dirname(__file__)))
@@ -16,3 +17,6 @@ class ConfigService:
 
     def getTelegramRecieverId(self):
         return os.getenv("TELEGRAM_CHAT_ID")
+
+    def getHltvResultEndpoint(self):
+        return self.HLTV_SITE + '/results'

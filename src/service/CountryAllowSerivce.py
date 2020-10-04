@@ -6,7 +6,7 @@ from src.entity.MatchEntity import MatchEntity
 class CountryAllowService:
     countries: Set = {
         'Ukraine',
-        'Belorussia',
+        'Belarus',
         'Kazakhstan',
         'Russia'
     }
