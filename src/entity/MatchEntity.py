@@ -3,7 +3,7 @@ from src.entity.TeamEntity import TeamEntity
 
 class MatchEntity:
     __id: int = 0
-    __stars: int = None
+    __stars: str = None
     __href: str = None
     __type: str = None
     __event: str = None
@@ -46,8 +46,8 @@ class MatchEntity:
     def get_event(self) -> str:
         return self.__event
 
-    def set_stars(self, stars: int):
+    def set_stars(self, stars: str):
         self.__stars = stars
 
-    def get_stars(self) -> int:
+    def get_stars(self) -> str:
         return self.__stars

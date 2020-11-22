@@ -14,32 +14,33 @@ class Parser:
     added_items: Set = {}
     list_output = []
     config = None
-    latestMatchesService = None
-    telegramNotifierService = None
-    countryAllowService = None
-    httpClientService = None
+    latest_matches_service = None
+    telegram_notifier_service = None
+    country_allow_service = None
+    http_client_service = None
     results = None
 
     def __init__(self):
         self.config = ConfigService()
-        self.latestMatchesService = LatestMatchesService()
-        self.telegramNotifierService = TelegramNotifierService()
-        self.countryAllowService = CountryAllowService()
-        self.httpClientService = HttpClientService()
+        self.latest_matches_service = LatestMatchesService()
+        self.telegram_notifier_service = TelegramNotifierService()
+        self.country_allow_service = CountryAllowService()
+        self.http_client_service = HttpClientService()
 
     def execute(self):
-        text = self.httpClientService.get_html_page(self.config.get_hltv_result_endpoint())
+        text = self.http_client_service.get_html_page(self.config.get_hltv_result_endpoint())
 
         soup = BeautifulSoup(text, "html.parser")
         matches = soup.find_all('div', {'data-zonedgrouping-headline-classes': 'standard-headline'})
+
         if len(matches):
             matches2 = matches[0].find_all('div', {'class': 'results-sublist'})
             our_matches = matches2[0]
             self.results = our_matches.find_all('div', {'class': 'result-con'})
-            self.added_items = self.latestMatchesService.get_all()
+            self.added_items = self.latest_matches_service.get_all()
             self.generate_dict()
             self.loop_result()
-            self.latestMatchesService.save(self.added_items)
+            self.latest_matches_service.save(self.added_items)
 
     def generate_dict(self):
         for item in self.results:
@@ -52,7 +53,7 @@ class Parser:
             match_entity.set_event(item.find('span', {'class': 'event-name'}).getText())
             match_entity.set_stars(self._get_stars(item))
 
-            html_page = self.httpClientService.get_html_page(self.config.HLTV_SITE + href)
+            html_page = self.http_client_service.get_html_page(self.config.HLTV_SITE + href)
             soup = BeautifulSoup(html_page, "html.parser")
 
             try:
@@ -75,12 +76,12 @@ class Parser:
 
     def loop_result(self):
         for item in self.list_output:
-            if item.getId() in self.added_items:
+            if item.get_id() in self.added_items:
                 continue
 
-            if self.countryAllowService.is_allow_country(item):
-                self.telegramNotifierService.notify(self.get_message(item))
-                self.added_items.add(item.getId())
+            if self.country_allow_service.is_allow_country(item):
+                self.telegram_notifier_service.notify(self.get_message(item))
+                self.added_items.add(item.get_id())
 
     def get_message(self, item: MatchEntity):
         looser_hashtag = ''
