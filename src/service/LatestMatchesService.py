@@ -9,8 +9,8 @@ class LatestMatchesService:
     def __init__(self):
         self.repository = LatestMatchesRepository()
 
-    def save(self, listIds: Set):
-        self.repository.save(listIds)
+    def save(self, list_ids: Set):
+        self.repository.save(list_ids)
 
-    def getAll(self) -> Set:
-        return self.repository.getAll()
+    def get_all(self) -> Set:
+        return self.repository.get_all()

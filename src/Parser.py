@@ -10,7 +10,7 @@ from src.service.LatestMatchesService import LatestMatchesService
 from src.service.TelegramNotifierService import TelegramNotifierService
 
 
-class Parser():
+class Parser:
     added_items: Set = {}
     list_output = []
     config = None
@@ -18,6 +18,7 @@ class Parser():
     telegramNotifierService = None
     countryAllowService = None
     httpClientService = None
+    results = None
 
     def __init__(self):
         self.config = ConfigService()
@@ -27,7 +28,7 @@ class Parser():
         self.httpClientService = HttpClientService()
 
     def execute(self):
-        text = self.httpClientService.getHtmlPage(self.config.getHltvResultEndpoint())
+        text = self.httpClientService.get_html_page(self.config.get_hltv_result_endpoint())
 
         soup = BeautifulSoup(text, "html.parser")
         matches = soup.find_all('div', {'data-zonedgrouping-headline-classes': 'standard-headline'})
@@ -35,81 +36,85 @@ class Parser():
             matches2 = matches[0].find_all('div', {'class': 'results-sublist'})
             our_matches = matches2[0]
             self.results = our_matches.find_all('div', {'class': 'result-con'})
-            self.added_items = self.latestMatchesService.getAll()
+            self.added_items = self.latestMatchesService.get_all()
             self.generate_dict()
             self.loop_result()
             self.latestMatchesService.save(self.added_items)
-
-    def get_stars(self, item):
-        data = item.find_all('i', {'class': 'fa-star'})
-        if len(data):
-            return "★" * len(data) + " "
-        return ""
-
-    def get_hashtag(self, str):
-        str = str.lower()
-        str = str.replace(' ', '_').replace('-', '_')
-        return f"%23{str}"
-
-    def get_id(self, string):
-        data = string.split("/")[2]
-        return int(data)
 
     def generate_dict(self):
         for item in self.results:
             href = item.find('a', {'class': 'a-reset'})['href']
 
-            matchEntity = MatchEntity()
-            matchEntity.setId(self.get_id(href))
-            matchEntity.setHref(self.config.HLTV_SITE + href)
-            matchEntity.setType(item.find('div', {'class': 'map-text'}).getText())
-            matchEntity.setEvent(item.find('span', {'class': 'event-name'}).getText())
-            matchEntity.setStars(self.get_stars(item))
+            match_entity = MatchEntity()
+            match_entity.set_id(self._get_id(href))
+            match_entity.set_href(self.config.HLTV_SITE + href)
+            match_entity.set_type(item.find('div', {'class': 'map-text'}).getText())
+            match_entity.set_event(item.find('span', {'class': 'event-name'}).getText())
+            match_entity.set_stars(self._get_stars(item))
 
-            htmlPage = self.httpClientService.getHtmlPage(self.config.HLTV_SITE + href)
-            soup = BeautifulSoup(htmlPage, "html.parser")
+            html_page = self.httpClientService.get_html_page(self.config.HLTV_SITE + href)
+            soup = BeautifulSoup(html_page, "html.parser")
 
             try:
                 teams = soup.find('div', {"class": "standard-box teamsBox"}).find_all("div", {"class": "team"})
-            except Exception as e:
+            except Exception:
                 continue
 
             for team in teams:
-                teamEntity = TeamEntity()
-                teamEntity.setScore(team.find("div", {"class": ["won", "lost"]}).text)
-                teamEntity.setTitle(team.find("img", {"class": "logo"})['title'])
-                teamEntity.setCountry(team.find("img", {"class": ["team1", "team2"]})['title'])
+                team_entity = TeamEntity()
+                team_entity.set_score(team.find("div", {"class": ["won", "lost"]}).text)
+                team_entity.set_title(team.find("img", {"class": "logo"})['title'])
+                team_entity.set_country(team.find("img", {"class": ["team1", "team2"]})['title'])
 
                 if team.find("div", {"class": "won"}):
-                    matchEntity.setWinner(teamEntity)
+                    match_entity.set_winner(team_entity)
                 elif team.find("div", {"class": "lost"}):
-                    matchEntity.setLooser(teamEntity)
+                    match_entity.set_looser(team_entity)
 
-            self.list_output.append(matchEntity)
+            self.list_output.append(match_entity)
 
     def loop_result(self):
         for item in self.list_output:
-            if item.getId() in self.added_items: continue
+            if item.getId() in self.added_items:
+                continue
 
-            if self.countryAllowService.isAllowCountry(item):
+            if self.countryAllowService.is_allow_country(item):
                 self.telegramNotifierService.notify(self.get_message(item))
                 self.added_items.add(item.getId())
 
     def get_message(self, item: MatchEntity):
         looser_hashtag = ''
 
-        if item.getWinner().getCountry() != item.getLooser().getCountry():
-            looser_hashtag = self.get_hashtag(item.getLooser().getCountry())
+        if item.get_winner().get_country() != item.get_looser().get_country():
+            looser_hashtag = self._get_hashtag(item.get_looser().get_country())
 
         msg = f"""
-{item.getStars()}<b>{item.getWinner().getTitle()}</b> выйграла у {item.getLooser().getTitle()} 
-со счетом <b>{item.getWinner().getScore()}</b> - {item.getLooser().getScore()} ({item.getType()}) 
-на турнире {item.getEvent()}, подробнее <a href='{item.getHref()}'>здесь</a> \n\n
-{self.get_hashtag(item.getWinner().getTitle())} 
-{self.get_hashtag(item.getLooser().getTitle())} 
-{self.get_hashtag(item.getType())} 
-{self.get_hashtag(item.getWinner().getCountry())} 
+{item.get_stars()}<b>{item.get_winner().get_title()}</b> выйграла у {item.get_looser().get_title()} 
+со счетом <b>{item.get_winner().get_score()}</b> - {item.get_looser().get_score()} ({item.get_type()}) 
+на турнире {item.get_event()}, подробнее <a href='{item.get_href()}'>здесь</a> \n\n
+{self._get_hashtag(item.get_winner().get_title())} 
+{self._get_hashtag(item.get_looser().get_title())} 
+{self._get_hashtag(item.get_type())} 
+{self._get_hashtag(item.get_winner().get_country())} 
 {looser_hashtag}
             """
 
         return msg
+
+    @staticmethod
+    def _get_stars(item) -> str:
+        data = item.find_all('i', {'class': 'fa-star'})
+        if len(data):
+            return "★" * len(data) + " "
+        return ""
+
+    @staticmethod
+    def _get_hashtag(string: str) -> str:
+        string = string.lower()
+        string = string.replace(' ', '_').replace('-', '_')
+        return f"%23{string}"
+
+    @staticmethod
+    def _get_id(string):
+        data = string.split("/")[2]
+        return int(data)

@@ -2,53 +2,52 @@ from src.entity.TeamEntity import TeamEntity
 
 
 class MatchEntity:
-    __id = 0
-    __winner = None
-    __looser = None
-    __href = None
-    __type = None
-    __event = None
-    __stars = None
+    __id: int = 0
+    __stars: int = None
+    __href: str = None
+    __type: str = None
+    __event: str = None
+    __winner: TeamEntity = None
+    __looser: TeamEntity = None
 
-    def setId(self, id):
-        self.__id = id
+    def set_id(self, identifier: int):
+        self.__id = identifier
 
-    def getId(self):
+    def get_id(self):
         return self.__id
 
-    def setWinner(self, winner: TeamEntity):
+    def set_winner(self, winner: TeamEntity):
         self.__winner = winner
 
-    def getWinner(self) -> TeamEntity:
+    def get_winner(self) -> TeamEntity:
         return self.__winner
 
-    def setLooser(self, looser: TeamEntity):
+    def set_looser(self, looser: TeamEntity):
         self.__looser = looser
 
-    def getLooser(self) -> TeamEntity:
+    def get_looser(self) -> TeamEntity:
         return self.__looser
 
-    def setHref(self, href):
+    def set_href(self, href: str):
         self.__href = href
 
-    def getHref(self):
+    def get_href(self) -> str:
         return self.__href
 
-    def setType(self, type):
-        self.__type = type
+    def set_type(self, kind: str):
+        self.__type = kind
 
-    def getType(self):
+    def get_type(self) -> str:
         return self.__type
 
-    def setEvent(self, event):
+    def set_event(self, event: str):
         self.__event = event
 
-    def getEvent(self):
+    def get_event(self) -> str:
         return self.__event
 
-    def setStars(self, stars):
+    def set_stars(self, stars: int):
         self.__stars = stars
 
-    def getStars(self):
+    def get_stars(self) -> int:
         return self.__stars
-
