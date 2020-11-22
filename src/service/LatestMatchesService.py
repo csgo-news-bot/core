@@ -4,13 +4,13 @@ from src.repository.LatestMatchesRepository import LatestMatchesRepository
 
 
 class LatestMatchesService:
-    repository = None
+    __repository = None
 
     def __init__(self):
-        self.repository = LatestMatchesRepository()
+        self.__repository = LatestMatchesRepository()
 
-    def save(self, listIds: Set):
-        self.repository.save(listIds)
+    def save(self, list_ids: Set):
+        self.__repository.save(list_ids)
 
-    def getAll(self) -> Set:
-        return self.repository.getAll()
+    def get_all(self) -> Set:
+        return self.__repository.get_all()

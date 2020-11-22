@@ -5,24 +5,24 @@ from src.service.ConfigService import ConfigService
 
 
 class LatestMatchesRepository:
-    config = None
+    __config = None
 
     def __init__(self):
-        self.config = ConfigService()
+        self.__config = ConfigService()
 
-    def save(self, listIds: Set):
-        listIds = list(listIds)[-100:]
+    def save(self, list_ids: Set):
+        list_ids = list(list_ids)[-100:]
 
-        with open(self.config.getLatestMatechesFilePath(), 'wb') as file:
-            pickle.dump(set(listIds), file)
+        with open(self.__config.get_latest_matches_file_path(), 'wb') as file:
+            pickle.dump(set(list_ids), file)
 
-    def getAll(self) -> Set:
+    def get_all(self) -> Set:
         try:
-            with open(self.config.getLatestMatechesFilePath(), 'rb') as file:
-                listIds = pickle.load(file)
-        except:
-            with open(self.config.getLatestMatechesFilePath(), 'wb') as file:
+            with open(self.__config.get_latest_matches_file_path(), 'rb') as file:
+                list_ids = pickle.load(file)
+        except Exception:
+            with open(self.__config.get_latest_matches_file_path(), 'wb') as file:
                 pickle.dump(set(), file)
-            return self.getAll()
+            return self.get_all()
 
-        return listIds
+        return list_ids

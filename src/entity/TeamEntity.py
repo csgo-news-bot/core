@@ -3,20 +3,20 @@ class TeamEntity:
     __title = None
     __country = None
 
-    def setScore(self, score):
+    def set_score(self, score):
         self.__score = score
 
-    def getScore(self):
+    def get_score(self):
         return self.__score
 
-    def setTitle(self, title):
+    def set_title(self, title):
         self.__title = title
 
-    def getTitle(self):
+    def get_title(self):
         return self.__title
 
-    def setCountry(self, country):
+    def set_country(self, country):
         self.__country = country
 
-    def getCountry(self):
+    def get_country(self):
         return self.__country
