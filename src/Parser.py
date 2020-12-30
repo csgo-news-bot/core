@@ -1,11 +1,11 @@
 from typing import Set
 
 from bs4 import BeautifulSoup
-from src import MatchEntity
+from src.entity import MatchEntity
 from src.entity.TeamEntity import TeamEntity
 from src.service.ConfigService import ConfigService
-from src.service import CountryAllowService
-from src.service import HttpClientService
+from src.service.CountryAllowService import CountryAllowService
+from src.service.HttpClientService import HttpClientService
 from src.service.LatestMatchesService import LatestMatchesService
 from src.service.TelegramNotifierService import TelegramNotifierService
 

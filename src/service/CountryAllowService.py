@@ -1,6 +1,6 @@
 from typing import Set
 
-from src import MatchEntity
+from src.entity import MatchEntity
 
 
 class CountryAllowService:
