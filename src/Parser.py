@@ -38,6 +38,12 @@ class Parser:
             our_matches = matches2[0]
             self.results = our_matches.find_all('div', {'class': 'result-con'})
             self.added_items = self.latest_matches_service.get_all()
+
+            # TODO: REMOVE IN FUTURE
+            if not isinstance(self.added_items, list):
+                self.added_items = list(self.added_items)
+            # END: REMOVE IN FUTURE
+
             self.generate_dict()
             self.loop_result()
             self.latest_matches_service.save(self.added_items)
@@ -81,7 +87,7 @@ class Parser:
 
             if self.country_allow_service.is_allow_country(item):
                 self.telegram_notifier_service.notify(self.get_message(item))
-                self.added_items.add(item.get_id())
+                self.added_items.append(item.get_id())
 
     def get_message(self, item: MatchEntity):
         looser_hashtag = ''
