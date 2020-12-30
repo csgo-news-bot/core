@@ -1,7 +1,6 @@
 FROM python:3.8.7-slim
 
 ARG PATH=/home/app
-RUN ls -la
 RUN mkdir -p ${PATH}
 COPY . ${PATH}
 WORKDIR ${PATH}
