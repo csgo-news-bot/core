@@ -1,7 +1,7 @@
 from typing import Set
 
 from bs4 import BeautifulSoup
-from src.entity import MatchEntity
+from src.entity.MatchEntity import MatchEntity
 from src.entity.TeamEntity import TeamEntity
 from src.service.ConfigService import ConfigService
 from src.service.CountryAllowService import CountryAllowService
