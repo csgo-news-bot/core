@@ -1,9 +1,9 @@
 FROM python:3.8.7-slim
 
-ARG PATH=/home/app
-RUN mkdir -p ${PATH}
-COPY . ${PATH}
-WORKDIR ${PATH}
+ARG APP_PATH=/home/app
+RUN mkdir -p ${APP_PATH}
+COPY . ${APP_PATH}
+WORKDIR ${APP_PATH}
 
 RUN pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
