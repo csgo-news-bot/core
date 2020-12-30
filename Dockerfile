@@ -6,5 +6,5 @@ COPY . ${APP_PATH}
 WORKDIR ${APP_PATH}
 
 RUN pip install pipenv
-RUN pipenv install --system --deploy --ignore-pipfile
+RUN pipenv install --deploy --ignore-pipfile
 CMD ["python", "main.py"]
