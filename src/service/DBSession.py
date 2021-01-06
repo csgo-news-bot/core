@@ -1,22 +1,31 @@
 from logging import getLogger
-
+from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError, DataError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
-from src.models.BaseModel import BaseModel
+from src.models import BaseModel
+from src.service.ConfigService import ConfigService
 
 log = getLogger()
 
 
-class DBSession(object):
-
+class DBSession:
     _session: Session
 
-    def __init__(self, session: Session, *args, **kwargs):
-        self._session = session
+    def __init__(self):
+        self.config = ConfigService()
 
-    def query(self, *entities, **kwargs):
-        return self._session.query(*entities, **kwargs)
+        session_class = sessionmaker(
+            bind=create_engine(
+                "postgresql+psycopg2://{}:{}@{}/{}".format(
+                    self.config.get_db_user(),
+                    self.config.get_db_pass(),
+                    self.config.get_db_host(),
+                    self.config.get_db_table(),
+                )
+            )
+        )
+        self._session = session_class()
 
     def add_model(self, model: BaseModel, need_flush: bool = False):
         self._session.add(model)
@@ -35,7 +44,10 @@ class DBSession(object):
         except DataError as e:
             log.error(f'`{__name__}` {e}')
 
-    def commit_session(self, need_close: bool = False):
+    def query(self, *entities, **kwargs):
+        return self._session.query(*entities, **kwargs)
+
+    def commit(self, need_close: bool = False):
         try:
             self._session.commit()
         except IntegrityError as e:
@@ -46,14 +58,17 @@ class DBSession(object):
             raise
 
         if need_close:
-            self.close_session()
+            self.close()
 
-    def close_session(self):
+    def close(self):
         try:
-            self._session.close()
+            self.close()
         except IntegrityError as e:
             log.error(f'`{__name__}` {e}')
             raise
         except DataError as e:
             log.error(f'`{__name__}` {e}')
             raise
+
+    def __del__(self):
+        self._session.close()

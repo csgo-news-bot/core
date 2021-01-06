@@ -1,12 +1,11 @@
-from sqlalchemy import Column, VARCHAR, Integer
+from sqlalchemy import Column, VARCHAR
 from sqlalchemy.orm import relationship
 
 from src.models.BaseModel import BaseModel
 
 
-class TeamModel(BaseModel):
-    __tablename__ = 'team'
+class EventModel(BaseModel):
+    __tablename__ = 'event'
 
     title = Column(VARCHAR(255), nullable=False)
-    country = Column(Integer, default=0)
     match = relationship("Match")
