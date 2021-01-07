@@ -17,9 +17,9 @@ class MatchCreator(DBAbstract):
         assert lose_score < won_score, f'lose_score ({lose_score}) doesnt be more than won_score ({won_score})'
 
         match_model = MatchModel()
-        match_model.team_won_id = team_won.id
-        match_model.team_lose_id = team_lose.id
-        match_model.event_id = event.id
+        match_model.team_won = team_won
+        match_model.team_lose = team_lose
+        match_model.event = event
         match_model.score_won = won_score
         match_model.score_lose = lose_score
 
