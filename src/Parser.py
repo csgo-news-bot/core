@@ -39,11 +39,6 @@ class Parser:
             self.results = our_matches.find_all('div', {'class': 'result-con'})
             self.added_items = self.latest_matches_service.get_all()
 
-            # TODO: REMOVE IN FUTURE
-            if not isinstance(self.added_items, list):
-                self.added_items = list(self.added_items)
-            # END: REMOVE IN FUTURE
-
             self.generate_dict()
             self.loop_result()
             self.latest_matches_service.save(self.added_items)

@@ -23,3 +23,19 @@ class ConfigService:
     @staticmethod
     def get_telegram_receiver_id():
         return os.getenv("TELEGRAM_CHAT_ID")
+
+    @staticmethod
+    def get_db_user():
+        return os.getenv("DB_USER")
+
+    @staticmethod
+    def get_db_pass():
+        return os.getenv("DB_PASS")
+
+    @staticmethod
+    def get_db_host():
+        return os.getenv("DB_HOST")
+
+    @staticmethod
+    def get_db_table():
+        return os.getenv("DB_TABLE")

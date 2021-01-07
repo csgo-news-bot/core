@@ -9,6 +9,9 @@ verify_ssl = true
 requests = "*"
 beautifulsoup4 = "*"
 python-dotenv = "*"
+sqlalchemy = "*"
+psycopg2-binary = "*"
+alembic = "*"
 
 [requires]
 python_version = "3.8"
