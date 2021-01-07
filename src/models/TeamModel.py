@@ -9,4 +9,3 @@ class TeamModel(BaseModel):
 
     title = Column(VARCHAR(255), nullable=False)
     country = Column(Integer, default=0)
-    match = relationship("Match")

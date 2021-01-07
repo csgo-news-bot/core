@@ -33,6 +33,8 @@ class DBSession:
         if need_flush:
             self._session.flush([model])
 
+        return model
+
     def delete_model(self, model: BaseModel):
         if model is None:
             log.warning(f'{__name__}: model is None')
@@ -46,6 +48,9 @@ class DBSession:
 
     def query(self, *entities, **kwargs):
         return self._session.query(*entities, **kwargs)
+
+    def rollback(self):
+        self._session.rollback()
 
     def commit(self, need_close: bool = False):
         try:
