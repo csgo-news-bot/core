@@ -8,6 +8,7 @@ from src.service.CountryAllowService import CountryAllowService
 from src.service.HttpClientService import HttpClientService
 from src.service.LatestMatchesService import LatestMatchesService
 from src.service.TelegramNotifierService import TelegramNotifierService
+from src.service.parser.core.ParseMatchesHTML import ParseMatchesHTML
 
 
 class Parser:
@@ -28,10 +29,8 @@ class Parser:
         self.http_client_service = HttpClientService()
 
     def execute(self):
-        text = self.http_client_service.get_html_page(self.config.get_hltv_result_endpoint())
-
-        soup = BeautifulSoup(text, "html.parser")
-        matches = soup.find_all('div', {'data-zonedgrouping-headline-classes': 'standard-headline'})
+        p = ParseMatchesHTML()
+        matches = p.main()
 
         if len(matches):
             matches2 = matches[0].find_all('div', {'class': 'results-sublist'})

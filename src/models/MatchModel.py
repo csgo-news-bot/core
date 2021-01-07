@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, VARCHAR
+from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, VARCHAR, TIMESTAMP
 from sqlalchemy.orm import relationship
 
 from src.models.BaseModel import BaseModel
@@ -6,6 +6,8 @@ from src.models.BaseModel import BaseModel
 
 class MatchModel(BaseModel):
     __tablename__ = 'match'
+
+    played_at = Column(TIMESTAMP, nullable=True, default=None)
 
     team_won_id = Column(ForeignKey('team.id'), nullable=False, index=True)
     team_won = relationship("TeamModel", foreign_keys=[team_won_id])
