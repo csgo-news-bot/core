@@ -16,9 +16,9 @@ class HLTVParser:
         self.html_matches_converter = HTMLMatchesToListDtoConverter()
         self.full_match_creator = FullMatchCreator()
 
-    def execute(self):
+    def execute(self, **kwargs):
         dto_list = self.html_matches_converter.get_list_of_dto(
-            self.parse_matches_html.get_matches()
+            self.parse_matches_html.get_matches(kwargs)
         )
 
         list_parsed_hltv_ids = [dto.id for dto in dto_list]

@@ -1,5 +1,7 @@
+import time
 from bs4 import BeautifulSoup
 
+from src.abstract.LoggerAbstract import LoggerAbstract
 from src.dto.MatchDTO import MatchDTO
 from src.dto.TeamDTO import TeamDTO
 from src.helpers.time import DateTimeHelper
@@ -7,10 +9,11 @@ from src.service.ConfigService import ConfigService
 from src.service.HttpClientService import HttpClientService
 
 
-class HTMLMatchesToListDtoConverter:
+class HTMLMatchesToListDtoConverter(LoggerAbstract):
     config: ConfigService
 
     def __init__(self):
+        super().__init__()
         self.config = ConfigService()
         self.http_client_service = HttpClientService()
 
@@ -32,7 +35,9 @@ class HTMLMatchesToListDtoConverter:
             match_dto.played_at = DateTimeHelper.unix_time_to_datetime(int(item['data-zonedgrouping-entry-unix']))
 
             html_page = self.http_client_service.get_html_page(self.config.HLTV_SITE + href)
+            self.logger.info(f'Opened {self.config.HLTV_SITE + href}')
             soup = BeautifulSoup(html_page, "html.parser")
+            time.sleep(1)
 
             try:
                 teams = soup.find('div', {"class": "standard-box teamsBox"}).find_all("div", {"class": "team"})
