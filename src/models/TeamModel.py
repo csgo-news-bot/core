@@ -10,4 +10,4 @@ class TeamModel(BaseModel):
     title = Column(VARCHAR(255), nullable=False)
 
     country_id = Column(ForeignKey('country.id'), nullable=False, index=True)
-    country = relationship("CountryModel", back_populates="team")
+    country = relationship("CountryModel", foreign_keys=[country_id])
