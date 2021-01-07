@@ -3,7 +3,7 @@ from sqlalchemy import Column, VARCHAR
 from src.models.BaseModel import BaseModel
 
 
-class EventModel(BaseModel):
-    __tablename__ = 'event'
+class MatchKindModel(BaseModel):
+    __tablename__ = 'match_kind'
 
     title = Column(VARCHAR(255), nullable=False)
