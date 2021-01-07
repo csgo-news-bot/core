@@ -47,6 +47,7 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
                 played_at=dto.played_at,
                 stars=dto.stars,
                 hltv_id=dto.id,
+                href=dto.href
             )
 
             self.db.commit()

@@ -9,4 +9,3 @@ class CountryModel(BaseModel):
 
     title = Column(VARCHAR(255), nullable=False)
     short = Column(VARCHAR(10), nullable=True)
-    team = relationship("TeamModel", uselist=False, back_populates="country")
