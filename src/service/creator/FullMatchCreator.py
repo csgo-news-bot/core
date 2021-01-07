@@ -18,7 +18,7 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
     match_kind_creator: MatchKindCreator
 
     def __init__(self):
-        super().__init__()
+        super(FullMatchCreator, self).__init__()
         self.country_creator = CountryCreator()
         self.event_creator = EventCreator()
         self.team_creator = TeamCreator()

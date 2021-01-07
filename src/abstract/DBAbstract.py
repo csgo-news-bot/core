@@ -9,3 +9,4 @@ class DBAbstract(ABC):
 
     def __init__(self):
         self.db = DBConnection.db()
+        super(DBAbstract, self).__init__()

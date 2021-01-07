@@ -8,3 +8,4 @@ class LoggerAbstract(ABC):
 
     def __init__(self):
         self.logger = Logger.instance()
+        super(LoggerAbstract, self).__init__()
