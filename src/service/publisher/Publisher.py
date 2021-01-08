@@ -20,7 +20,7 @@ class Publisher(LoggerAbstract, DBAbstract):
         unpublished_matches = self.repository.get_unpublished_matches()
         try:
             for match in unpublished_matches:
-                self.sender_message.execute()
+                self.sender_message.execute(match)
                 self.match_updater.update_publish_by_id(match_id=match.id, publish=True)
 
             self.db.commit()
