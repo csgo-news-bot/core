@@ -11,11 +11,11 @@ class TelegramSender(LoggerAbstract):
         super(TelegramSender, self).__init__()
         self.__config = ConfigService()
 
-    def send_image(self, image = None, caption: str = ''):
+    def send_image(self, image, caption: str = ''):
         try:
             url = f"https://api.telegram.org/bot{self.__config.get_telegram_bot_token()}/sendPhoto"
             files = {
-                'photo': open(self.__config.get_images_path() + 'image.png', 'rb')
+                'photo': image
             }
             data = {
                 'chat_id': self.__config.get_telegram_receiver_id(),

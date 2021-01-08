@@ -35,3 +35,7 @@ class ConfigService:
     @staticmethod
     def get_db_table():
         return os.getenv("DB_TABLE")
+
+    @staticmethod
+    def get_csgo_server_image_generator_url():
+        return os.getenv("CSGO_SERVER_IMAGE_GENERATOR__URL")
