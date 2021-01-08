@@ -17,6 +17,6 @@ class SenderMessage:
     def execute(self, match: MatchModel):
         message = self.message.get(match)
         image = self.image.get(match)
-        self.telegram_sender.send_image(caption=message)
+        self.telegram_sender.send_image(caption=message, image=image)
 
 
