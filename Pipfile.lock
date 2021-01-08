@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "22b23787f15a5a4b87a0fcde0da87b9b50658b011c4c2984b869c0d4f79e6e83"
+            "sha256": "30e19f9d05db57ea476dfca12133f3f00a786b711cf18a46b192d68199833972"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -55,6 +55,13 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.10"
+        },
+        "imgkit": {
+            "hashes": [
+                "sha256:29a12adf8dc3f2c65c465bcb0568393573b8d52c4be2a4a9230b162a1ac53c8d"
+            ],
+            "index": "pypi",
+            "version": "==1.0.2"
         },
         "mako": {
             "hashes": [

@@ -3,11 +3,7 @@ from os.path import dirname
 
 
 class ConfigService:
-    LATEST_MATCHES_PATH = '/var/latest_matches.pickle'
     HLTV_SITE = "https://www.hltv.org"
-
-    def get_latest_matches_file_path(self):
-        return self.get_app_path() + self.LATEST_MATCHES_PATH
 
     def get_hltv_result_endpoint(self):
         return self.HLTV_SITE + '/results'

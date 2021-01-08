@@ -26,30 +26,34 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
         self.match_kind_creator = MatchKindCreator()
 
     def process_to_create(self, list_of_dtos: List[MatchDTO], black_list: List[int] = None):
-        for dto in list_of_dtos:
-            if dto.id in black_list:
-                continue
+        try:
+            for dto in list_of_dtos:
+                if dto.id in black_list:
+                    continue
 
-            country_looser = self.country_creator.create(title=dto.looser.country)
-            country_winner = self.country_creator.create(title=dto.winner.country)
-            event = self.event_creator.create(title=dto.event)
-            team_looser = self.team_creator.create(title=dto.looser.title, country=country_looser)
-            team_winner = self.team_creator.create(title=dto.winner.title, country=country_winner)
-            match_kind = self.match_kind_creator.create(title=dto.type)
-            match = self.match_creator.create(
-                team_won=team_winner,
-                team_lose=team_looser,
-                match_kind=match_kind,
-                event=event,
+                country_looser = self.country_creator.create(title=dto.looser.country)
+                country_winner = self.country_creator.create(title=dto.winner.country)
+                event = self.event_creator.create(title=dto.event)
+                team_looser = self.team_creator.create(title=dto.looser.title, country=country_looser)
+                team_winner = self.team_creator.create(title=dto.winner.title, country=country_winner)
+                match_kind = self.match_kind_creator.create(title=dto.type)
+                match = self.match_creator.create(
+                    team_won=team_winner,
+                    team_lose=team_looser,
+                    match_kind=match_kind,
+                    event=event,
 
-                won_score=dto.winner.score,
-                lose_score=dto.looser.score,
-                played_at=dto.played_at,
-                stars=dto.stars,
-                hltv_id=dto.id,
-                href=dto.href
-            )
+                    won_score=dto.winner.score,
+                    lose_score=dto.looser.score,
+                    played_at=dto.played_at,
+                    stars=dto.stars,
+                    hltv_id=dto.id,
+                    href=dto.href
+                )
 
-            self.db.commit()
-            self.logger.info(f'Added {dto.looser.title} vs {dto.winner.title}')
+                self.db.commit()
+                self.logger.info(f'Added {dto.looser.title} vs {dto.winner.title}')
+        except Exception as e:
+            self.logger.error(e)
+            self.db.rollback()
 

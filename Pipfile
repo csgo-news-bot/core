@@ -12,6 +12,7 @@ python-dotenv = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
 alembic = "*"
+imgkit = "*"
 
 [requires]
 python_version = "3.8"
