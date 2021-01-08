@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, VARCHAR, TIMESTAMP
+from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, VARCHAR, TIMESTAMP, Boolean
 from sqlalchemy.orm import relationship
 
 from src.models.BaseModel import BaseModel
@@ -25,3 +25,4 @@ class MatchModel(BaseModel):
     stars = Column(SmallInteger, default=0)
     hltv_id = Column(Integer, default=0)
     href = Column(VARCHAR(500), default="")
+    published = Column(Boolean, default=None)
