@@ -5,9 +5,6 @@ from os.path import dirname
 class ConfigService:
     HLTV_SITE = "https://www.hltv.org"
 
-    def get_images_path(self):
-        return self.get_app_path() + '/var/images/'
-
     def get_hltv_result_endpoint(self):
         return self.HLTV_SITE + '/results'
 
