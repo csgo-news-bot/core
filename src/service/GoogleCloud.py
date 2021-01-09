@@ -8,14 +8,18 @@ class GoogleCloud(LoggerAbstract):
     def __init__(self):
         super(GoogleCloud, self).__init__()
         self.client = storage.Client()
+        self.bucket = self.client.get_bucket('csgo_global_elite')
 
-    def upload(self, folder: str, img_name: str) -> bool:
+    def upload(self, folder: str, img_blob, img_name) -> bool:
         try:
             assert folder in self.folder_list(), f'{folder} doesnt have access'
+            path = f'{folder}/{img_name}'
 
-            bucket = self.client.get_bucket('csgo_global_elite')
-            blob = bucket.blob(f'{folder}/{img_name}')
-            blob.upload_from_filename(filename=img_name)
+            exist = storage.Blob(bucket=self.bucket, name=path).exists(self.client)
+
+            if not exist:
+                blob = self.bucket.blob(path)
+                blob.upload_from_string(img_blob)
 
             return True
         except Exception as e:

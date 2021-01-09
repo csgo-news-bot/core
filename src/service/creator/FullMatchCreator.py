@@ -31,11 +31,25 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
                 if dto.id in black_list:
                     continue
 
-                country_looser = self.country_creator.create(title=dto.looser.country)
-                country_winner = self.country_creator.create(title=dto.winner.country)
+                country_looser = self.country_creator.create(
+                    title=dto.looser.country,
+                    image_url=dto.looser.country_image_url
+                )
+                country_winner = self.country_creator.create(
+                    title=dto.winner.country,
+                    image_url=dto.winner.country_image_url
+                )
                 event = self.event_creator.create(title=dto.event)
-                team_looser = self.team_creator.create(title=dto.looser.title, country=country_looser)
-                team_winner = self.team_creator.create(title=dto.winner.title, country=country_winner)
+                team_looser = self.team_creator.create(
+                    title=dto.looser.title,
+                    country=country_looser,
+                    image_url=dto.looser.image_url
+                )
+                team_winner = self.team_creator.create(
+                    title=dto.winner.title,
+                    country=country_winner,
+                    image_url=dto.winner.image_url
+                )
                 match_kind = self.match_kind_creator.create(title=dto.type)
                 match = self.match_creator.create(
                     team_won=team_winner,
