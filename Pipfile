@@ -13,6 +13,8 @@ sqlalchemy = "*"
 psycopg2-binary = "*"
 alembic = "*"
 selenium = "*"
+google-cloud-storage = "*"
+strict-hint = "*"
 
 [requires]
 python_version = "3.8"

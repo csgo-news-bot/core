@@ -1,4 +1,4 @@
-from .BaseModel import Base, BaseModel
+from .Base.BaseModel import Base, BaseModel
 from .CountryModel import CountryModel
 from .TeamModel import TeamModel
 from .EventModel import EventModel

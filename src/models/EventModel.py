@@ -1,9 +1,9 @@
-from sqlalchemy import Column, VARCHAR
+from src.models import BaseModel
+from src.models.Base.HrefBaseModel import HrefBaseModel
+from src.models.Base.ImageBaseModel import ImageBaseModel
+from src.models.Base.TitleBaseModel import TitleBaseModel
 
-from src.models.BaseModel import BaseModel
 
-
-class EventModel(BaseModel):
+class EventModel(BaseModel, TitleBaseModel, ImageBaseModel, HrefBaseModel):
     __tablename__ = 'event'
-
-    title = Column(VARCHAR(255), nullable=False)
+    google_storage_folder = 'event'

@@ -24,4 +24,5 @@ class TelegramSender(LoggerAbstract):
             }
             r = requests.post(url, files=files, data=data, timeout=10)
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(e, exc_info=True)
+

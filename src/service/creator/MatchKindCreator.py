@@ -1,5 +1,7 @@
+from strict_hint import strict
+
 from src.abstract.DBAbstract import DBAbstract
-from src.models import EventModel, MatchKindModel
+from src.models import MatchKindModel
 from src.repository.MatchKindRepository import MatchKindRepository
 
 
@@ -10,6 +12,7 @@ class MatchKindCreator(DBAbstract):
         super().__init__()
         self.repository = MatchKindRepository()
 
+    @strict
     def create(self, title: str, commit: bool = False) -> MatchKindModel:
         assert title != '', 'Match kind name doesnt be empty'
 

@@ -25,5 +25,5 @@ class Publisher(LoggerAbstract, DBAbstract):
 
             self.db.commit()
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(e, exc_info=True)
             self.db.rollback()

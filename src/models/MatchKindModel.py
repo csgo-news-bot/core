@@ -1,9 +1,6 @@
-from sqlalchemy import Column, VARCHAR
+from src.models import BaseModel
+from src.models.Base.TitleBaseModel import TitleBaseModel
 
-from src.models.BaseModel import BaseModel
 
-
-class MatchKindModel(BaseModel):
+class MatchKindModel(BaseModel, TitleBaseModel):
     __tablename__ = 'match_kind'
-
-    title = Column(VARCHAR(255), nullable=False)
