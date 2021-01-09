@@ -42,7 +42,7 @@ class ConfigService:
 
     @staticmethod
     def get_app_env():
-        return os.getenv("APP_ENV")
+        return os.getenv("APP_ENV", "prod")
 
     @staticmethod
     def get_google_storage_bucket():
