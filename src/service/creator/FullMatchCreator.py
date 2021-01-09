@@ -43,8 +43,8 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
                     match_kind=match_kind,
                     event=event,
 
-                    won_score=dto.winner.score,
-                    lose_score=dto.looser.score,
+                    won_score=int(dto.winner.score),
+                    lose_score=int(dto.looser.score),
                     played_at=dto.played_at,
                     stars=dto.stars,
                     hltv_id=dto.id,

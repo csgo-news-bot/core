@@ -1,3 +1,5 @@
+from strict_hint import strict
+
 from src.abstract.DBAbstract import DBAbstract
 from src.models import EventModel
 from src.repository.EventRepository import EventRepository
@@ -10,6 +12,7 @@ class EventCreator(DBAbstract):
         super().__init__()
         self.repository = EventRepository()
 
+    @strict
     def create(self, title: str, commit: bool = False) -> EventModel:
         assert title != '', 'Event name doesnt be empty'
 

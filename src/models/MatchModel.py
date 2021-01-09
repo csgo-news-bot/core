@@ -2,9 +2,10 @@ from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, VARCHAR, TIMES
 from sqlalchemy.orm import relationship
 
 from src.models import BaseModel
+from src.models.Base.HrefBaseModel import HrefBaseModel
 
 
-class MatchModel(BaseModel):
+class MatchModel(BaseModel, HrefBaseModel):
     __tablename__ = 'match'
 
     played_at = Column(TIMESTAMP, nullable=True, default=None)
@@ -24,5 +25,4 @@ class MatchModel(BaseModel):
     score_won = Column(SmallInteger, default=0)
     stars = Column(SmallInteger, default=0)
     hltv_id = Column(Integer, default=0)
-    href = Column(VARCHAR(500), default="")
     published = Column(Boolean, default=None)

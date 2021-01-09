@@ -1,4 +1,5 @@
 from datetime import datetime
+from strict_hint import strict
 
 from src.abstract.DBAbstract import DBAbstract
 from src.models.EventModel import EventModel
@@ -8,6 +9,7 @@ from src.models.MatchKindModel import MatchKindModel
 
 
 class MatchCreator(DBAbstract):
+    @strict
     def create(
         self,
         won_score: int,

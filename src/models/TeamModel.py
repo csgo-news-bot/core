@@ -2,11 +2,12 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 
 from src.models import BaseModel
+from src.models.Base.HrefBaseModel import HrefBaseModel
 from src.models.Base.ImageBaseModel import ImageBaseModel
 from src.models.Base.TitleBaseModel import TitleBaseModel
 
 
-class TeamModel(BaseModel, TitleBaseModel, ImageBaseModel):
+class TeamModel(BaseModel, TitleBaseModel, ImageBaseModel, HrefBaseModel):
     __tablename__ = 'team'
     google_storage_folder = 'team'
 

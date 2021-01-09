@@ -1,3 +1,5 @@
+from strict_hint import strict
+
 from src.abstract.DBAbstract import DBAbstract
 from src.models import CountryModel
 from src.models.TeamModel import TeamModel
@@ -11,6 +13,7 @@ class TeamCreator(DBAbstract):
         super().__init__()
         self.repository = TeamRepository()
 
+    @strict
     def create(self, title: str, country: CountryModel, commit: bool = False) -> TeamModel:
         assert title != '', 'Team name doesnt be empty'
 

@@ -1,3 +1,5 @@
+from strict_hint import strict
+
 from src.abstract.DBAbstract import DBAbstract
 from src.models import CountryModel
 from src.repository.CountryRepository import CountryRepository
@@ -10,6 +12,7 @@ class CountryCreator(DBAbstract):
         super().__init__()
         self.repository = CountryRepository()
 
+    @strict
     def create(self, title: str = '', short: str = '', commit: bool = False) -> CountryModel:
         assert title != '', 'Country name doesnt be empty'
 
