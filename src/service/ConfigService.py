@@ -39,3 +39,7 @@ class ConfigService:
     @staticmethod
     def get_csgo_server_image_generator_url():
         return os.getenv("CSGO_SERVER_IMAGE_GENERATOR__URL")
+
+    @staticmethod
+    def get_google_bucket():
+        return os.getenv("CSGO_SERVER_IMAGE_GENERATOR__URL")

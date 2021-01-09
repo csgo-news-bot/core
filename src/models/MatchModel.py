@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, VARCHAR, TIMESTAMP, Boolean
 from sqlalchemy.orm import relationship
 
-from src.models.BaseModel import BaseModel
+from src.models import BaseModel
 
 
 class MatchModel(BaseModel):
