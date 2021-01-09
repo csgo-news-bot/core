@@ -27,7 +27,7 @@ class CountryCreator(DBAbstract):
             return country_model
 
         img_filename = self.image_google_cloud_creator.create(
-            url=self.config.HLTV_SITE + image_url,
+            image_url=self.config.HLTV_SITE + image_url,
             title=title,
             folder=CountryModel.google_storage_folder
         )

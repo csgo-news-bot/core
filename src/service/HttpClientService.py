@@ -1,4 +1,9 @@
+from typing import Dict
+
 import requests
+
+from src.dto.ImageResponseDTO import ImageResponseDTO
+from src.helpers.string import StringHelper
 
 
 class HttpClientService:
@@ -11,7 +16,11 @@ class HttpClientService:
 
         return response.text
 
-    def get_blob_from_url(self, url: str):
+    def get_blob_from_url(self, url: str) -> ImageResponseDTO:
         req = requests.get(url, headers=self.headers)
-        return req.content
+        result = ImageResponseDTO()
+        result.blob = req.content
+        result.mime = req.headers['content-type']
+        result.ext = StringHelper.get_extension_from_url(url)
+        return result
 

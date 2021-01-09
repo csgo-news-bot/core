@@ -1,6 +1,7 @@
 from google.cloud import storage
 
 from src.abstract.LoggerAbstract import LoggerAbstract
+from src.dto.ImageResponseDTO import ImageResponseDTO
 from src.models import TeamModel, EventModel, CountryModel
 
 
@@ -10,7 +11,7 @@ class GoogleCloud(LoggerAbstract):
         self.client = storage.Client()
         self.bucket = self.client.get_bucket('csgo_global_elite')
 
-    def upload(self, folder: str, img_blob, img_name) -> bool:
+    def upload(self, folder: str, image_response_dto: ImageResponseDTO, img_name) -> bool:
         try:
             assert folder in self.folder_list(), f'{folder} doesnt have access'
             path = f'{folder}/{img_name}'
@@ -19,7 +20,10 @@ class GoogleCloud(LoggerAbstract):
 
             if not exist:
                 blob = self.bucket.blob(path)
-                blob.upload_from_string(img_blob)
+                blob.upload_from_string(
+                    blob=image_response_dto.blob,
+                    content_type=image_response_dto.mime
+                )
 
             return True
         except Exception as e:

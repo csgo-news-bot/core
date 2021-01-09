@@ -17,19 +17,17 @@ class ImageGoogleCloudCreator:
         self.http_client_service = HttpClientService()
 
     @strict
-    def create(self, url: str, title, folder: str) -> str:
-        img_full_url = self.config.HLTV_SITE + url
-        img_blob = self.http_client_service.get_blob_from_url(
-            img_full_url
+    def create(self, image_url: str, title, folder: str) -> str:
+        image_response_dto = self.http_client_service.get_blob_from_url(
+            image_url
         )
 
         img_title = StringHelper.get_string(title)
-        img_ext = StringHelper.get_extension_from_url(img_full_url)
-        img_filename = img_title + img_ext
+        img_filename = img_title + image_response_dto.ext
 
         self.google_cloud.upload(
             folder=folder,
-            img_blob=img_blob,
+            image_response_dto=image_response_dto,
             img_name=img_filename
         )
 

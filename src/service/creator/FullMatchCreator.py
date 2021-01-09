@@ -1,4 +1,6 @@
+import sys
 from typing import List
+import traceback
 
 from src.abstract.DBAbstract import DBAbstract
 from src.abstract.LoggerAbstract import LoggerAbstract
@@ -68,6 +70,6 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
                 self.db.commit()
                 self.logger.info(f'Added {dto.looser.title} vs {dto.winner.title}')
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(e, exc_info=True)
             self.db.rollback()
 
