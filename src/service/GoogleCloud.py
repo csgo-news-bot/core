@@ -21,7 +21,7 @@ class GoogleCloud(LoggerAbstract):
             if not exist:
                 blob = self.bucket.blob(path)
                 blob.upload_from_string(
-                    blob=image_response_dto.blob,
+                    data=image_response_dto.blob,
                     content_type=image_response_dto.mime
                 )
 
