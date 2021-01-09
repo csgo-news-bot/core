@@ -15,7 +15,7 @@ if __name__ == "__main__":
     parser = ParserThread()
     parser.start()
 
-    if config.get_app_status() == 'prod':
+    if config.get_app_env() == 'prod':
         publisher = PublisherThread()
         publisher.start()
 

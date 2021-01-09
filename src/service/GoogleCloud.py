@@ -3,13 +3,17 @@ from google.cloud import storage
 from src.abstract.LoggerAbstract import LoggerAbstract
 from src.dto.ImageResponseDTO import ImageResponseDTO
 from src.models import TeamModel, EventModel, CountryModel
+from src.service.ConfigService import ConfigService
 
 
 class GoogleCloud(LoggerAbstract):
+    config: ConfigService
+
     def __init__(self):
         super(GoogleCloud, self).__init__()
         self.client = storage.Client()
-        self.bucket = self.client.get_bucket('csgo_global_elite')
+        self.config = ConfigService()
+        self.bucket = self.client.get_bucket(self.config.get_google_storage_bucket())
 
     def upload(self, folder: str, image_response_dto: ImageResponseDTO, img_name) -> bool:
         try:
