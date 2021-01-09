@@ -15,5 +15,6 @@ class Screenshot(LoggerAbstract):
                 browser.get(link)
             return browser.get_screenshot_as_png()
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(e, exc_info=True)
+
             return None

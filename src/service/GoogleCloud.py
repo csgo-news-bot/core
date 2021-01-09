@@ -27,7 +27,7 @@ class GoogleCloud(LoggerAbstract):
 
             return True
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(e, exc_info=True)
             return False
 
     @staticmethod
