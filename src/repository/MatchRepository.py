@@ -1,7 +1,6 @@
 from typing import List
 from uuid import UUID
-from sqlalchemy import desc, extract
-from sqlalchemy.sql.expression import false
+from sqlalchemy import asc, desc, extract
 from datetime import datetime
 
 from src.abstract.DBAbstract import DBAbstract
@@ -29,4 +28,4 @@ class MatchRepository(DBAbstract):
 
     def get_unpublished_matches(self) -> List[MatchModel]:
         return self.db.query(MatchModel)\
-            .filter(MatchModel.published.is_(None)).order_by(desc(MatchModel.played_at)).all()
+            .filter(MatchModel.published.is_(None)).order_by(asc(MatchModel.played_at)).all()
