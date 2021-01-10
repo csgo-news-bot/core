@@ -6,6 +6,11 @@ class ConfigService:
     HLTV_SITE = "https://www.hltv.org"
     GOOGLE_STORAGE = "https://storage.googleapis.com/"
 
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(ConfigService, cls).__new__(cls)
+        return cls.instance
+
     def get_hltv_result_endpoint(self):
         return self.HLTV_SITE + '/results'
 
