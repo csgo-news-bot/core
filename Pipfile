@@ -15,6 +15,7 @@ alembic = "*"
 selenium = "*"
 google-cloud-storage = "*"
 strict-hint = "*"
+jinja2 = "*"
 
 [requires]
 python_version = "3.8"

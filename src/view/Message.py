@@ -1,15 +1,22 @@
 import random
+from jinja2 import Template
+
 from src.models import MatchModel
+from src.service.ConfigService import ConfigService
 
 
 class Message:
     def get(self, match: MatchModel) -> str:
-        return f"""
-        {self.__get_stars(match.stars)}<b>{match.team_won.title}</b> {self.__get_random_won_phrase()} 
-        {match.team_lose.title} со счетом <b>{match.score_won}</b> - {match.score_lose} ({match.match_kind.title}) 
-        на турнире {match.event.title}, подробнее <a href='{match.href}'>здесь</a> \n\n
-        {self.__get_hash_tag_string(match)}
-        """
+        html = open(ConfigService.get_templates_path() + 'message.html').read()
+
+        template = Template(html)
+
+        return template.render(
+            match=match,
+            stars=self.__get_stars(match.stars),
+            hashtags=self.__get_hash_tag_string(match),
+            won_phrase=self.__get_random_won_phrase(),
+        )
 
     def __get_hash_tag_string(self, match: MatchModel) -> str:
         list_words = [
@@ -24,7 +31,7 @@ class Message:
     @staticmethod
     def __get_stars(count: int) -> str:
         if count:
-            return "★" * count + " "
+            return "★" * count
         return ""
 
     @staticmethod
@@ -43,7 +50,7 @@ class Message:
             'оделели',
             'осилили',
             'разбили',
-            'разбоставили позади',
+            'оставили позади',
             'перещеголяли',
             'одержать победу над',
             'взяли верх над',

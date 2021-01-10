@@ -9,5 +9,9 @@ class DBAbstract(ABC):
     db: DBSession
 
     def __init__(self):
-        self.db = DBConnection.db(threading.currentThread().getName())
+        self.db = DBConnection.db('publisher')
+
+        if threading.currentThread().getName() in DBConnection.SESSIONS_KEYS_LIST:
+            self.db = DBConnection.db(threading.currentThread().getName())
+
         super(DBAbstract, self).__init__()

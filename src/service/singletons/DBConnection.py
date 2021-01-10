@@ -2,6 +2,10 @@ from src.service.DBSession import DBSession
 
 
 class DBConnection:
+    SESSIONS_KEYS_LIST = [
+        'publisher',
+        'parser',
+    ]
     _instance: dict = None
 
     def __init__(self):
@@ -11,7 +15,7 @@ class DBConnection:
     def db(cls, session_name: str):
         if cls._instance is None:
             cls._instance = {
-                'parser': DBSession(),
-                'publisher': DBSession(),
+                DBConnection.SESSIONS_KEYS_LIST[0]: DBSession(),
+                DBConnection.SESSIONS_KEYS_LIST[1]: DBSession(),
             }
         return cls._instance.get(session_name)
