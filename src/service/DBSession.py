@@ -52,7 +52,7 @@ class DBSession:
     def rollback(self):
         self._session.rollback()
 
-    def commit(self, need_close: bool = False):
+    def commit(self, flush: bool = False, need_close: bool = False):
         try:
             self._session.commit()
         except IntegrityError as e:
@@ -61,6 +61,9 @@ class DBSession:
         except DataError as e:
             log.error(f'`{__name__}` {e}')
             raise
+
+        if flush:
+            self._session.flush()
 
         if need_close:
             self.close()

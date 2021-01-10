@@ -13,10 +13,12 @@ config = ConfigService()
 
 if __name__ == "__main__":
     parser = ParserThread()
+    parser.setName('parser')
     parser.start()
 
     if config.get_app_env() == 'prod':
         publisher = PublisherThread()
+        publisher.setName('publisher')
         publisher.start()
 
 
