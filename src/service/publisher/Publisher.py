@@ -28,7 +28,7 @@ class Publisher(LoggerAbstract, DBAbstract):
                 self.db.commit()
                 self.logger.info(f'There are new matches {len(unpublished_matches)}')
             else:
-                self.logger.inf('No matches at this time')
+                self.logger.info('No matches at this time')
         except Exception as e:
             self.logger.error(e, exc_info=True)
             self.db.rollback()
