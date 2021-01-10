@@ -1,12 +1,14 @@
 name: ci
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches: master
 
 jobs:
   main:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
     steps:
       -
         name: Set up QEMU
