@@ -1,6 +1,6 @@
 from urllib.parse import urlencode
 
-from src.models import MatchModel
+from src.models import MatchModel, TeamModel
 from src.service.ConfigService import ConfigService
 from src.service.Screenshot import Screenshot
 
@@ -26,6 +26,14 @@ class Image:
             "team_won_score": match.score_won,
             "team_lose_score": match.score_lose,
             "match_type": match.match_kind.title,
+            "team_won_logo_url": ConfigService.get_url_to_google_cloud(
+                folder=TeamModel.google_storage_folder,
+                image=match.team_won.image
+            ),
+            "team_lose_logo_url": ConfigService.get_url_to_google_cloud(
+                folder=TeamModel.google_storage_folder,
+                image=match.team_lose.image
+            ),
         }
         full_url = f"{url}?{urlencode(params)}"
         image = self.screenshot.take_image(full_url)

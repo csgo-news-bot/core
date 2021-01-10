@@ -4,6 +4,7 @@ from os.path import dirname
 
 class ConfigService:
     HLTV_SITE = "https://www.hltv.org"
+    GOOGLE_STORAGE = "https://storage.googleapis.com/"
 
     def get_hltv_result_endpoint(self):
         return self.HLTV_SITE + '/results'
@@ -42,8 +43,18 @@ class ConfigService:
 
     @staticmethod
     def get_app_env():
-        return os.getenv("APP_ENV")
+        return os.getenv("APP_ENV", "prod")
 
     @staticmethod
     def get_google_storage_bucket():
         return os.getenv("GOOGLE_BUCKET")
+
+    @staticmethod
+    def get_url_to_google_cloud(folder: str, image):
+        if image == '' or image is None:
+            return f'{ConfigService.GOOGLE_STORAGE}{ConfigService.get_google_storage_bucket()}/other/unknown.svg'
+        return f'{ConfigService.GOOGLE_STORAGE}{ConfigService.get_google_storage_bucket()}/{folder}/{image}'
+
+    @staticmethod
+    def get_url_selenium():
+        return os.getenv("SELENIUM_URL")

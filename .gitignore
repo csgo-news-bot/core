@@ -3,4 +3,4 @@
 .env.dev
 .idea
 .pyc
-gcs.creds
+service_key.json

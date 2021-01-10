@@ -13,4 +13,4 @@ class PublisherThread(threading.Thread):
             publisher = Publisher()
             publisher.execute()
 
-            time.sleep(3)  # every 18 min
+            time.sleep(1000)  # every 18 min
