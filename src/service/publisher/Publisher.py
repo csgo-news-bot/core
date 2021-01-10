@@ -19,12 +19,16 @@ class Publisher(LoggerAbstract, DBAbstract):
     def execute(self):
         unpublished_matches = self.repository.get_unpublished_matches()
         try:
-            for match in unpublished_matches:
-                result = self.sender_message.execute(match)
-                if result:
-                    self.match_updater.update_publish_by_id(match_id=match.id, publish=True)
+            if len(unpublished_matches):
+                for match in unpublished_matches:
+                    result = self.sender_message.execute(match)
+                    if result:
+                        self.match_updater.update_publish_by_id(match_id=match.id, publish=True)
 
-            self.db.commit()
+                self.db.commit()
+                self.logger.info(f'There are new matches {len(unpublished_matches)}')
+            else:
+                self.logger.inf('No matches at this time')
         except Exception as e:
             self.logger.error(e, exc_info=True)
             self.db.rollback()

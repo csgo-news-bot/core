@@ -9,6 +9,7 @@ class ParserThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        parser = HLTVParser()
-        parser.execute()
-        time.sleep(600)  # every 20 min
+        while True:
+            parser = HLTVParser()
+            parser.execute()
+            time.sleep(600)  # every 20 min
