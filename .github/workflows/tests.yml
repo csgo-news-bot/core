@@ -20,6 +20,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install --deploy --system --ignore-pipfile
-    - name: Test with pytest
+    - name: Test with unittest
       run: |
         python -m unittest discover -p '*Test.py'
