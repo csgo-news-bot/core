@@ -24,7 +24,6 @@ class TeamCreator(DBAbstract):
         if team_model:
             return team_model
 
-
         team_model = TeamModel()
         team_model.title = title
         team_model.country = country

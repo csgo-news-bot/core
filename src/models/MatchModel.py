@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, VARCHAR, TIMESTAMP, Boolean
+from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, TIMESTAMP, Boolean
 from sqlalchemy.orm import relationship
 
 from src.models import BaseModel
