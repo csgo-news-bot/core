@@ -1,7 +1,7 @@
 from src.models import MatchModel
 from src.service.publisher.core.Image import Image
-from src.service.publisher.core.Message import Message
 from src.service.publisher.core.TelegramSender import TelegramSender
+from src.view.Message import Message
 
 
 class SenderMessage:

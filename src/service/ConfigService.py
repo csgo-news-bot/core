@@ -14,6 +14,10 @@ class ConfigService:
         return dirname(dirname(dirname(__file__)))
 
     @staticmethod
+    def get_templates_path() -> str:
+        return ConfigService.get_app_path() + '/templates/'
+
+    @staticmethod
     def get_telegram_bot_token():
         return os.getenv("TELEGRAM_BOT_TOKEN")
 
