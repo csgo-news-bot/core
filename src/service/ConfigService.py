@@ -54,3 +54,7 @@ class ConfigService:
         if image == '' or image is None:
             return f'{ConfigService.GOOGLE_STORAGE}{ConfigService.get_google_storage_bucket()}/other/unknown.svg'
         return f'{ConfigService.GOOGLE_STORAGE}{ConfigService.get_google_storage_bucket()}/{folder}/{image}'
+
+    @staticmethod
+    def get_url_selenium():
+        return os.getenv("SELENIUM_URL")
