@@ -40,7 +40,7 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
 
                 country_winner = country_looser
 
-                if dto.winner.country == dto.looser.country:
+                if dto.winner.country != dto.looser.country:
                     country_winner = self.country_creator.create(
                         title=dto.winner.country,
                         image_url=dto.winner.country_image_url,
