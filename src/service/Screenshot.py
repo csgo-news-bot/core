@@ -18,10 +18,11 @@ class Screenshot(LoggerAbstract):
         options.add_argument('window-size=1280x720')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        command_executor = f'{self.config.get_url_selenium()}/wd/hub'
 
         try:
             browser = webdriver.Remote(
-                command_executor=f'{self.config.get_url_selenium()}/wd/hub',
+                command_executor=command_executor,
                 desired_capabilities=DesiredCapabilities.CHROME,
                 options=options
             )
