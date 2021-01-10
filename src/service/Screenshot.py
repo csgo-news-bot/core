@@ -1,5 +1,5 @@
 from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from src.abstract.LoggerAbstract import LoggerAbstract
 from src.service.ConfigService import ConfigService

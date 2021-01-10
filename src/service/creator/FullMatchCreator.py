@@ -1,3 +1,4 @@
+import json
 import sys
 from typing import List
 import traceback
@@ -28,19 +29,22 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
         self.match_kind_creator = MatchKindCreator()
 
     def process_to_create(self, list_of_dtos: List[MatchDTO], black_list: List[int] = None):
-        try:
-            for dto in list_of_dtos:
-                if dto.id in black_list:
-                    continue
-
+        for dto in list_of_dtos:
+            if dto.id in black_list:
+                continue
+            try:
                 country_looser = self.country_creator.create(
                     title=dto.looser.country,
-                    image_url=dto.looser.country_image_url
+                    image_url=dto.looser.country_image_url,
+                    commit=True
                 )
+
                 country_winner = self.country_creator.create(
                     title=dto.winner.country,
-                    image_url=dto.winner.country_image_url
+                    image_url=dto.winner.country_image_url,
+                    commit=True
                 )
+
                 event = self.event_creator.create(title=dto.event)
                 team_looser = self.team_creator.create(
                     title=dto.looser.title,
@@ -67,9 +71,9 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
                     href=dto.href
                 )
 
-                self.db.commit()
+                self.db.commit(flush=True)
                 self.logger.info(f'Added {dto.looser.title} vs {dto.winner.title}')
-        except Exception as e:
-            self.logger.error(e, exc_info=True)
-            self.db.rollback()
+            except Exception as e:
+                self.logger.error(f'{e}', exc_info=True)
+                self.db.rollback()
 
