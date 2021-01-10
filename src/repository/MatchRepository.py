@@ -28,4 +28,5 @@ class MatchRepository(DBAbstract):
         return self.db.query(MatchModel).filter(MatchModel.hltv_id.in_(list_ids)).all()
 
     def get_unpublished_matches(self) -> List[MatchModel]:
-        return self.db.query(MatchModel).filter(MatchModel.published.is_(None)).all()
+        return self.db.query(MatchModel)\
+            .filter(MatchModel.published.is_(None)).order_by(desc(MatchModel.played_at)).all()
