@@ -14,9 +14,13 @@ class SenderMessage:
         self.telegram_sender = TelegramSender()
         self.image = Image()
 
-    def execute(self, match: MatchModel):
+    def execute(self, match: MatchModel) -> bool:
         message = self.message.get(match)
         image = self.image.get(match)
-        self.telegram_sender.send_image(caption=message, image=image)
+        if image:
+            self.telegram_sender.send_image(caption=message, image=image)
+            return True
+
+        return False
 
 
