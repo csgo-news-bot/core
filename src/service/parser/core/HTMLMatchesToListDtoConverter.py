@@ -28,41 +28,25 @@ class HTMLMatchesToListDtoConverter(LoggerAbstract):
         for item in html_matches:
             href = item.find('a', {'class': 'a-reset'})['href']
 
-            if StringHelper.search_list_id_in_string(
-                list_ids=list_ids,
-                string=href
-            ):
+            if StringHelper.search_list_id_in_string(list_ids=list_ids, string=href):
                 continue
 
-            match_dto = MatchDTO()
-            match_dto.id = self._get_id(href)
-            match_dto.href = self.config.HLTV_SITE + href
-            match_dto.type = item.find('div', {'class': 'map-text'}).getText()
-            match_dto.event = item.find('span', {'class': 'event-name'}).getText()
-            match_dto.stars = self._get_count_stars(item)
-            match_dto.played_at = DateTimeHelper.unix_time_to_datetime(int(item['data-zonedgrouping-entry-unix']))
-
+            match_dto = self.__create_match_dto(item=item, href=href)
             html_page = self.http_client_service.get_html_page(self.config.HLTV_SITE + href)
+            time.sleep(1)
 
             self.logger.info(f'Opened {self.config.HLTV_SITE + href}')
+
             soup = BeautifulSoup(html_page, "html.parser")
-            time.sleep(1)
 
             try:
                 teams = soup.find('div', {"class": "standard-box teamsBox"}).find_all("div", {"class": "team"})
-            except Exception:
+            except Exception as e:
+                self.logger.error(e, exc_info=True)
                 continue
 
             for team in teams:
-                team_dto = TeamDTO()
-                team_dto.score = team.find("div", {"class": ["won", "lost"]}).text
-                team_dto.title = team.find("img", {"class": "logo"})['title']
-                team_dto.country = team.find("img", {"class": ["team1", "team2"]})['title']
-                team_dto.country_image_url = team.find("img", {"class": ["team1", "team2"]})['src']
-                team_dto.image_url = team.find("img", {"class": "logo"})['src']
-
-                if team_dto.image_url == 'https://static.hltv.org/images/team/logo/0':
-                    team_dto.image_url = None
+                team_dto = self.__create_team_dto(team)
 
                 if team.find("div", {"class": "won"}):
                     match_dto.winner = team_dto
@@ -72,6 +56,29 @@ class HTMLMatchesToListDtoConverter(LoggerAbstract):
             result.append(match_dto)
 
         return result
+
+    def __create_match_dto(self, item, href):
+        match_dto = MatchDTO()
+        match_dto.id = self._get_id(href)
+        match_dto.href = self.config.HLTV_SITE + href
+        match_dto.type = item.find('div', {'class': 'map-text'}).getText()
+        match_dto.event = item.find('span', {'class': 'event-name'}).getText()
+        match_dto.stars = self._get_count_stars(item)
+        match_dto.played_at = DateTimeHelper.unix_time_to_datetime(int(item['data-zonedgrouping-entry-unix']))
+        return match_dto
+
+    def __create_team_dto(self, team) -> TeamDTO:
+        team_dto = TeamDTO()
+        team_dto.score = team.find("div", {"class": ["won", "lost"]}).text
+        team_dto.title = team.find("img", {"class": "logo"})['title']
+        team_dto.country = team.find("img", {"class": ["team1", "team2"]})['title']
+        team_dto.country_image_url = team.find("img", {"class": ["team1", "team2"]})['src']
+        team_dto.image_url = team.find("img", {"class": "logo"})['src']
+
+        if team_dto.image_url == 'https://static.hltv.org/images/team/logo/0':
+            team_dto.image_url = None
+
+        return team_dto
 
     @staticmethod
     def _get_count_stars(item) -> int:
