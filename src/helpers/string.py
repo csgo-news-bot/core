@@ -12,3 +12,14 @@ class StringHelper:
         path = parse.urlparse(url).path
         ext = os.path.splitext(path)[1]
         return ext
+
+    @staticmethod
+    def search_list_id_in_string(list_ids: list, string: str) -> bool:
+        if len(list_ids) == 0:
+            return False
+
+        for i in list_ids:
+            if f'/{i}/' in string:
+                return True
+
+        return False

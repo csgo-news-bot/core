@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from src.abstract.LoggerAbstract import LoggerAbstract
 from src.dto.MatchDTO import MatchDTO
 from src.dto.TeamDTO import TeamDTO
+from src.helpers.string import StringHelper
 from src.helpers.time import DateTimeHelper
 from src.service.ConfigService import ConfigService
 from src.service.HttpClientService import HttpClientService
@@ -17,14 +18,21 @@ class HTMLMatchesToListDtoConverter(LoggerAbstract):
         self.config = ConfigService()
         self.http_client_service = HttpClientService()
 
-    def get_list_of_dto(self, html_matches: list) -> list:
+    def get_list_of_dto(self, html_matches: list, hltv_ids_added_today: list) -> list:
         result = []
+        list_ids = [item.hltv_id for item in hltv_ids_added_today]
 
         if len(html_matches) == 0:
             return []
 
         for item in html_matches:
             href = item.find('a', {'class': 'a-reset'})['href']
+
+            if StringHelper.search_list_id_in_string(
+                list_ids=list_ids,
+                string=href
+            ):
+                continue
 
             match_dto = MatchDTO()
             match_dto.id = self._get_id(href)
@@ -35,6 +43,7 @@ class HTMLMatchesToListDtoConverter(LoggerAbstract):
             match_dto.played_at = DateTimeHelper.unix_time_to_datetime(int(item['data-zonedgrouping-entry-unix']))
 
             html_page = self.http_client_service.get_html_page(self.config.HLTV_SITE + href)
+
             self.logger.info(f'Opened {self.config.HLTV_SITE + href}')
             soup = BeautifulSoup(html_page, "html.parser")
             time.sleep(1)
@@ -51,6 +60,7 @@ class HTMLMatchesToListDtoConverter(LoggerAbstract):
                 team_dto.country = team.find("img", {"class": ["team1", "team2"]})['title']
                 team_dto.country_image_url = team.find("img", {"class": ["team1", "team2"]})['src']
                 team_dto.image_url = team.find("img", {"class": "logo"})['src']
+
                 if team_dto.image_url == 'https://static.hltv.org/images/team/logo/0':
                     team_dto.image_url = None
 
