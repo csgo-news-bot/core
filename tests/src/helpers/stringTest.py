@@ -11,3 +11,7 @@ class StringHelperTestCase(unittest.TestCase):
         self.assertFalse(StringHelper.search_list_id_in_string(list_ids=[123321, 1233211], string=string))
         self.assertFalse(StringHelper.search_list_id_in_string(list_ids=[], string=string))
         self.assertTrue(StringHelper.search_list_id_in_string(list_ids=[123321, 1233211, 2346047], string=string))
+
+    def test_get_hastag(self):
+        self.assertTrue("#team_x", StringHelper.get_hashtag("team-x"))
+        self.assertTrue("#team_x", StringHelper.get_hashtag("team x"))

@@ -23,3 +23,11 @@ class StringHelper:
                 return True
 
         return False
+
+    @staticmethod
+    def get_hashtag(word: str) -> str:
+        symbols_list = [" ", "-"]
+        string = word.lower()
+        for i in symbols_list:
+            string.replace(i, "_")
+        return f'#{string}'
