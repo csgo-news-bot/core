@@ -26,7 +26,7 @@ class Message:
             match.team_lose.country.title,
             match.match_kind.title
         ]
-        return ' ' + ' '.join(map(lambda x: self.__get_hashtag(x), list_words))
+        return ' '.join(map(lambda x: self.__get_hashtag(x), list_words))
 
     @staticmethod
     def __get_stars(count: int) -> str:

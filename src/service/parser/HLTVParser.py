@@ -1,3 +1,5 @@
+import datetime
+
 from src.repository.MatchRepository import MatchRepository
 from src.service.creator.FullMatchCreator import FullMatchCreator
 from src.service.parser.core.HTMLMatchesToListDtoConverter import HTMLMatchesToListDtoConverter
@@ -17,9 +19,14 @@ class HLTVParser:
         self.full_match_creator = FullMatchCreator()
 
     def execute(self, **kwargs):
+
         dto_list = self.html_matches_converter.get_list_of_dto(
-            self.parse_matches_html.get_matches(kwargs)
+            html_matches=self.parse_matches_html.get_matches(kwargs),
+            hltv_ids_added_today=self.match_repository.get_all_by_datetime(date=datetime.datetime.now())
         )
+
+        if len(dto_list) == 0:
+            return None
 
         list_parsed_hltv_ids = [dto.id for dto in dto_list]
 
