@@ -1,6 +1,7 @@
 import random
 from jinja2 import Template
 
+from src.helpers.string import StringHelper
 from src.models import MatchModel
 from src.service.ConfigService import ConfigService
 
@@ -18,7 +19,8 @@ class Message:
             won_phrase=self.__get_random_won_phrase(),
         )
 
-    def __get_hash_tag_string(self, match: MatchModel) -> str:
+    @staticmethod
+    def __get_hash_tag_string(match: MatchModel) -> str:
         list_words = [
             match.team_won.title,
             match.team_lose.title,
@@ -26,17 +28,13 @@ class Message:
             match.team_lose.country.title,
             match.match_kind.title
         ]
-        return ' '.join(map(lambda x: self.__get_hashtag(x), list_words))
+        return ' '.join(map(lambda x: StringHelper.get_hashtag(x), list_words))
 
     @staticmethod
     def __get_stars(count: int) -> str:
         if count:
             return "★" * count
         return ""
-
-    @staticmethod
-    def __get_hashtag(word: str) -> str:
-        return f'#{word.lower().replace(" ", "_")}'
 
     @staticmethod
     def __get_random_won_phrase() -> str:
@@ -55,6 +53,6 @@ class Message:
             'одержать победу над',
             'взяли верх над',
             'расколотили',
-            'сорвали победу у ',
+            'сорвали победу у',
         ]
         return random.choice(words)
