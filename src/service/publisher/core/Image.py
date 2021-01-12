@@ -1,6 +1,6 @@
 from urllib.parse import urlencode
 
-from src.models import MatchModel, TeamModel
+from src.models import MatchModel, TeamModel, CountryModel
 from src.service.ConfigService import ConfigService
 from src.service.Screenshot import Screenshot
 
@@ -35,11 +35,11 @@ class Image:
                 image=match.team_lose.image
             ),
             "team_won_flag_url": ConfigService.get_url_to_google_cloud(
-                folder=TeamModel.google_storage_folder,
+                folder=CountryModel.google_storage_folder,
                 image=match.team_won.county.image
             ),
             "team_lose_flag_url": ConfigService.get_url_to_google_cloud(
-                folder=TeamModel.google_storage_folder,
+                folder=CountryModel.google_storage_folder,
                 image=match.team_lose.county.image
             )
         }
