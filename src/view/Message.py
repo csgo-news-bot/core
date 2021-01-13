@@ -24,10 +24,13 @@ class Message:
         list_words = [
             match.team_won.title,
             match.team_lose.title,
+            match.match_kind.title,
             match.team_won.country.title,
-            match.team_lose.country.title,
-            match.match_kind.title
         ]
+
+        if match.team_won.country.title != match.team_lose.country.title:
+            list_words.append(match.team_lose.country.title)
+
         return ' '.join(map(lambda x: StringHelper.get_hashtag(x), list_words))
 
     @staticmethod
