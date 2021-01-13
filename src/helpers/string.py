@@ -29,5 +29,5 @@ class StringHelper:
         symbols_list = [" ", "-"]
         string = word.lower()
         for i in symbols_list:
-            string.replace(i, "_")
+            string = string.replace(i, "_")
         return f'#{string}'
