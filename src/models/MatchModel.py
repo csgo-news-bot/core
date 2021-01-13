@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, SmallInteger, Integer, TIMESTAMP, Boolean
 from sqlalchemy.orm import relationship
 
-from src.models import BaseModel
+from src.models import BaseModel, TeamModel
 from src.models.Base.HrefBaseModel import HrefBaseModel
 
 
@@ -11,9 +11,9 @@ class MatchModel(BaseModel, HrefBaseModel):
     played_at = Column(TIMESTAMP, nullable=True, default=None)
 
     team_won_id = Column(ForeignKey('team.id'), nullable=False, index=True)
-    team_won = relationship("TeamModel", foreign_keys=[team_won_id])
+    team_won: TeamModel = relationship("TeamModel", foreign_keys=[team_won_id])
     team_lose_id = Column(ForeignKey('team.id'), nullable=False, index=True)
-    team_lose = relationship("TeamModel", foreign_keys=[team_lose_id])
+    team_lose: TeamModel = relationship("TeamModel", foreign_keys=[team_lose_id])
 
     event_id = Column(ForeignKey('event.id'), nullable=False, index=True)
     event = relationship("EventModel", foreign_keys=[event_id])
