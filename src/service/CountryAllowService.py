@@ -1,6 +1,6 @@
 from typing import Set
 
-from src.entity import MatchEntity
+from src.models import MatchModel
 
 
 class CountryAllowService:
@@ -11,7 +11,7 @@ class CountryAllowService:
         'Russia'
     }
 
-    def is_allow_country(self, match: MatchEntity) -> bool:
+    def is_allow_country(self, match: MatchModel) -> bool:
         return bool(
-            {match.get_winner().get_country(), match.get_looser().get_country()}.intersection(self.countries)
+            {match.team_won.country.title, match.team_lose.country.title}.intersection(self.countries)
         )
