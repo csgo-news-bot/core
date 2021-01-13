@@ -36,11 +36,11 @@ class Image:
             ),
             "team_won_flag_url": ConfigService.get_url_to_google_cloud(
                 folder=CountryModel.google_storage_folder,
-                image=match.team_won.county.image
+                image=match.team_won.country.image
             ),
             "team_lose_flag_url": ConfigService.get_url_to_google_cloud(
                 folder=CountryModel.google_storage_folder,
-                image=match.team_lose.county.image
+                image=match.team_lose.country.image
             )
         }
         full_url = f"{url}?{urlencode(params)}"
