@@ -1,17 +1,21 @@
-# Телеграм-Бот постинга матчей CS:GO из HLTV
-## Фичи
-* Фильтр стран
-* Отправка в телеграм
+# Telegram bot for post matches from HLTV
+## Features
+* Parsing and store Matches
+* Country filter
+* Send to telegram
 
-## Установка 
-* Создать и заполнить .env из .env.example
-* Выполнить `alembic upgrade head`
-* Получить json ключ и установить его по этой инструскции https://stackoverflow.com/questions/56875958/how-to-authenticate-docker-container-with-google-service
-## Миграции
-Создание
+## Install 
+* Create and fill .env from .env.example
+* Run `alembic upgrade head`
+* Get service_key.json and store it to project https://stackoverflow.com/questions/56875958/how-to-authenticate-docker-container-with-google-service
+## Migrations
+How to create
 
 `alembic revision --autogenerate -m "Migration name"`
 
-Применение 
+How to apply 
 
 `alembic upgrade head`
+
+## Testing 
+`python -m unittest discover -p '*Test.py'`
