@@ -78,12 +78,12 @@ class CreateMatchDTOFromUrl(LoggerAbstract):
 
     @staticmethod
     def get_type(string: str) -> str:
-        map = {
+        type_map = {
             'Best of 1': 'bo1',
             'Best of 3': 'bo3',
             'Best of 5': 'bo5',
         }
-        for k, v in map.items():
+        for k, v in type_map.items():
             if string.find(k) != -1:
                 return v
 
