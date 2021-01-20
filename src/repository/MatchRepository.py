@@ -11,6 +11,9 @@ class MatchRepository(DBAbstract):
     def get_by_id(self, match_id: UUID) -> MatchModel:
         return self.db.query(MatchModel).filter(MatchModel.id == match_id).first()
 
+    def get_by_hltv_id(self, match_id: int) -> MatchModel:
+        return self.db.query(MatchModel).filter(MatchModel.hltv_id == match_id).first()
+
     def get_all(self, limit: int = 10):
         return self.db.query(MatchModel).order_by(desc(MatchModel.created_at)).limit(limit).all()
 

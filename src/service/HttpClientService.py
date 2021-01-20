@@ -1,5 +1,3 @@
-from typing import Dict
-
 import requests
 
 from src.dto.ImageResponseDTO import ImageResponseDTO

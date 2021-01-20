@@ -1,22 +1,13 @@
-import time
-from bs4 import BeautifulSoup
-
-from src.abstract.LoggerAbstract import LoggerAbstract
-from src.dto.MatchDTO import MatchDTO
-from src.dto.TeamDTO import TeamDTO
 from src.helpers.string import StringHelper
-from src.helpers.time import DateTimeHelper
-from src.service.ConfigService import ConfigService
-from src.service.HttpClientService import HttpClientService
+from src.service.parser.CreateMatchDTOFromUrl import CreateMatchDTOFromUrl
 
 
-class HTMLMatchesToListDtoConverter(LoggerAbstract):
-    config: ConfigService
+class HTMLMatchesToListDtoConverter:
+    create_match_dto_from_url: CreateMatchDTOFromUrl
 
     def __init__(self):
         super().__init__()
-        self.config = ConfigService()
-        self.http_client_service = HttpClientService()
+        self.create_match_dto_from_url = CreateMatchDTOFromUrl()
 
     def get_list_of_dto(self, html_matches: list, hltv_ids_added_today: list) -> list:
         result = []
@@ -31,54 +22,14 @@ class HTMLMatchesToListDtoConverter(LoggerAbstract):
             if StringHelper.search_list_id_in_string(list_ids=list_ids, string=href):
                 continue
 
-            match_dto = self.__create_match_dto(item=item, href=href)
-            html_page = self.http_client_service.get_html_page(self.config.HLTV_SITE + href)
-            time.sleep(1)
+            match_dto = self.create_match_dto_from_url.create(href=href)
+            match_dto.stars = self._get_count_stars(item)
+            match_dto.type = item.find('div', {'class': 'map-text'}).getText()
 
-            self.logger.info(f'Opened {self.config.HLTV_SITE + href}')
-
-            soup = BeautifulSoup(html_page, "html.parser")
-
-            try:
-                teams = soup.find('div', {"class": "standard-box teamsBox"}).find_all("div", {"class": "team"})
-            except Exception as e:
-                self.logger.error(e, exc_info=True)
-                continue
-
-            for team in teams:
-                team_dto = self.__create_team_dto(team)
-
-                if team.find("div", {"class": "won"}):
-                    match_dto.winner = team_dto
-                elif team.find("div", {"class": "lost"}):
-                    match_dto.looser = team_dto
-
-            result.append(match_dto)
+            if match_dto:
+                result.append(match_dto)
 
         return result
-
-    def __create_match_dto(self, item, href):
-        match_dto = MatchDTO()
-        match_dto.id = self._get_id(href)
-        match_dto.href = self.config.HLTV_SITE + href
-        match_dto.type = item.find('div', {'class': 'map-text'}).getText()
-        match_dto.event = item.find('span', {'class': 'event-name'}).getText()
-        match_dto.stars = self._get_count_stars(item)
-        match_dto.played_at = DateTimeHelper.unix_time_to_datetime(int(item['data-zonedgrouping-entry-unix']))
-        return match_dto
-
-    def __create_team_dto(self, team) -> TeamDTO:
-        team_dto = TeamDTO()
-        team_dto.score = team.find("div", {"class": ["won", "lost"]}).text
-        team_dto.title = team.find("img", {"class": "logo"})['title']
-        team_dto.country = team.find("img", {"class": ["team1", "team2"]})['title']
-        team_dto.country_image_url = team.find("img", {"class": ["team1", "team2"]})['src']
-        team_dto.image_url = team.find("img", {"class": "logo"})['src']
-
-        if team_dto.image_url == 'https://static.hltv.org/images/team/logo/0':
-            team_dto.image_url = None
-
-        return team_dto
 
     @staticmethod
     def _get_count_stars(item) -> int:
@@ -86,8 +37,3 @@ class HTMLMatchesToListDtoConverter(LoggerAbstract):
         if len(data):
             return len(data)
         return 0
-
-    @staticmethod
-    def _get_id(string: str) -> int:
-        data = string.split("/")[2]
-        return int(data)
