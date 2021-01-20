@@ -1,3 +1,5 @@
+import time
+
 from src.abstract.DBAbstract import DBAbstract
 from src.abstract.LoggerAbstract import LoggerAbstract
 from src.repository.MatchRepository import MatchRepository
@@ -24,7 +26,7 @@ class Publisher(LoggerAbstract, DBAbstract):
                     result = self.sender_message.execute(match)
                     if result:
                         self.match_updater.update_publish_by_id(match_id=match.id, publish=True)
-
+                    time.sleep(3)
                 self.db.commit()
                 self.logger.info(f'There are new matches {len(unpublished_matches)}')
             else:
