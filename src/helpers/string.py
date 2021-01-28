@@ -26,7 +26,7 @@ class StringHelper:
 
     @staticmethod
     def get_hashtag(word: str) -> str:
-        symbols_list = [" ", "-"]
+        symbols_list = [" ", "-", "."]
         string = word.lower()
         for i in symbols_list:
             string = string.replace(i, "_")

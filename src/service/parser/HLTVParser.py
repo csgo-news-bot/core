@@ -19,7 +19,6 @@ class HLTVParser:
         self.full_match_creator = FullMatchCreator()
 
     def execute(self, **kwargs):
-
         dto_list = self.html_matches_converter.get_list_of_dto(
             html_matches=self.parse_matches_html.get_matches(kwargs),
             hltv_ids_added_today=self.match_repository.get_all_by_datetime(date=datetime.datetime.now())
@@ -28,16 +27,6 @@ class HLTVParser:
         if len(dto_list) == 0:
             return None
 
-        list_parsed_hltv_ids = [dto.id for dto in dto_list]
-
-        black_list = []
-        if len(list_parsed_hltv_ids) != 0:
-            items = self.match_repository.get_all_by_hltv_list_ids(
-                list_ids=list_parsed_hltv_ids
-            )
-            black_list = [dto.hltv_id for dto in items]
-
         self.full_match_creator.process_to_create(
-            list_of_dtos=dto_list,
-            black_list=black_list
+            list_of_dtos=dto_list
         )

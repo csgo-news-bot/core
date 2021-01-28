@@ -12,4 +12,8 @@ class TeamModel(BaseModel, TitleBaseModel, ImageBaseModel, HrefBaseModel):
     google_storage_folder = 'team'
 
     country_id = Column(ForeignKey('country.id'), nullable=False, index=True)
-    country: CountryModel = relationship("CountryModel", foreign_keys=[country_id])
+    country: CountryModel = relationship(
+        "CountryModel",
+        foreign_keys=[country_id],
+        viewonly=True
+    )
