@@ -1,4 +1,5 @@
 import os
+import re
 from urllib import parse
 
 
@@ -31,3 +32,8 @@ class StringHelper:
         for i in symbols_list:
             string = string.replace(i, "_")
         return f'#{string}'
+
+    @staticmethod
+    def get_match_id_from_url(url: str) -> int:
+        match = re.search(r"/(\d+)/", url)
+        return int(match.groups()[0])

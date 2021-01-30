@@ -3,7 +3,6 @@ from typing import List
 from src.abstract.DBAbstract import DBAbstract
 from src.abstract.LoggerAbstract import LoggerAbstract
 from src.dto.MatchDTO import MatchDTO
-from src.repository.MatchRepository import MatchRepository
 from src.service.creator.CountryCreator import CountryCreator
 from src.service.creator.EventCreator import EventCreator
 from src.service.creator.MatchCreator import MatchCreator
@@ -17,7 +16,6 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
     team_creator: TeamCreator
     match_creator: MatchCreator
     match_kind_creator: MatchKindCreator
-    match_repository: MatchRepository
 
     def __init__(self):
         super(FullMatchCreator, self).__init__()
@@ -26,14 +24,8 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
         self.team_creator = TeamCreator()
         self.match_creator = MatchCreator()
         self.match_kind_creator = MatchKindCreator()
-        self.match_repository = MatchRepository()
 
     def create_from_match_dto(self, match_dto: MatchDTO):
-        match = self.match_repository.get_by_hltv_id(match_dto.id)
-
-        if match:
-            return None
-
         country_looser = self.country_creator.create(
             title=match_dto.looser.country,
             image_url=match_dto.looser.country_image_url,

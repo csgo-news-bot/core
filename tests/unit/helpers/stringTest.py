@@ -12,6 +12,10 @@ class StringHelperTestCase(unittest.TestCase):
         self.assertFalse(StringHelper.search_list_id_in_string(list_ids=[], string=string))
         self.assertTrue(StringHelper.search_list_id_in_string(list_ids=[123321, 1233211, 2346047], string=string))
 
-    def test_get_hastag(self):
+    def test_get_hashtag(self):
         self.assertEqual("#team_x", StringHelper.get_hashtag("team-x"))
         self.assertEqual("#team_x", StringHelper.get_hashtag("team x"))
+
+    def test_get_match_id_from_url(self):
+        url = "https://www.hltv.org/matches/2346295/pain-vs-rebirth-dreamhack-open-january-2021-north-america"
+        self.assertEqual(2346295, StringHelper.get_match_id_from_url(url))
