@@ -22,8 +22,7 @@ class DBSession:
                 self._config.get_db_host(),
                 self._config.get_db_table(),
             ),
-            pool_recycle=3600,
-            echo=False
+            pool_recycle=3600
         )
         Base.metadata.create_all(engine)
 
