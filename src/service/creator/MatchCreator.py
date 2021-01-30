@@ -22,7 +22,6 @@ class MatchCreator(DBAbstract):
         stars: int = 0,
         hltv_id: int = 0,
         href: str = "",
-        commit: bool = False,
     ) -> MatchModel:
         assert lose_score < won_score, f'lose_score ({lose_score}) doesnt be more than won_score ({won_score})'
         assert played_at is not None, f'played_at doesnt be is null ({played_at})'
@@ -40,9 +39,6 @@ class MatchCreator(DBAbstract):
         match_model.hltv_id = hltv_id
         match_model.href = href
 
-        self.db.add_model(match_model, need_flush=True)
-
-        if commit:
-            self.db.commit()
+        self.db.add_model(match_model)
 
         return match_model

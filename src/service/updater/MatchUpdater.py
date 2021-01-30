@@ -16,8 +16,6 @@ class MatchUpdater(DBAbstract):
 
         match_model.published = publish
 
-        self.db.add_model(match_model, need_flush=True)
-
         if commit:
             self.db.commit()
 

@@ -15,5 +15,4 @@ class TeamModel(BaseModel, TitleBaseModel, ImageBaseModel, HrefBaseModel):
     country: CountryModel = relationship(
         "CountryModel",
         foreign_keys=[country_id],
-        viewonly=True
     )

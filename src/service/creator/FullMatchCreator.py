@@ -29,57 +29,51 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
         self.match_repository = MatchRepository()
 
     def create_from_match_dto(self, match_dto: MatchDTO):
-        try:
-            match = self.match_repository.get_by_hltv_id(match_dto.id)
+        match = self.match_repository.get_by_hltv_id(match_dto.id)
 
-            if match:
-                return None
+        if match:
+            return None
 
-            country_looser = self.country_creator.create(
-                title=match_dto.looser.country,
-                image_url=match_dto.looser.country_image_url,
-                commit=True,
-            )
+        country_looser = self.country_creator.create(
+            title=match_dto.looser.country,
+            image_url=match_dto.looser.country_image_url,
+        )
 
-            country_winner = self.country_creator.create(
-                title=match_dto.winner.country,
-                image_url=match_dto.winner.country_image_url,
-                commit=True,
-            )
-            event = self.event_creator.create(title=match_dto.event, commit=True)
-            team_looser = self.team_creator.create(
-                title=match_dto.looser.title,
-                country=country_looser,
-                image_url=match_dto.looser.image_url,
-                commit=True,
-            )
-            team_winner = self.team_creator.create(
-                title=match_dto.winner.title,
-                country=country_winner,
-                image_url=match_dto.winner.image_url,
-                commit=True,
-            )
+        country_winner = self.country_creator.create(
+            title=match_dto.winner.country,
+            image_url=match_dto.winner.country_image_url,
+        )
 
-            match_kind = self.match_kind_creator.create(title=match_dto.type)
-            match = self.match_creator.create(
-                team_won=team_winner,
-                team_lose=team_looser,
-                match_kind=match_kind,
-                event=event,
+        team_looser = self.team_creator.create(
+            title=match_dto.looser.title,
+            country=country_looser,
+            image_url=match_dto.looser.image_url,
+        )
+        team_winner = self.team_creator.create(
+            title=match_dto.winner.title,
+            country=country_winner,
+            image_url=match_dto.winner.image_url,
+        )
 
-                won_score=int(match_dto.winner.score),
-                lose_score=int(match_dto.looser.score),
-                played_at=match_dto.played_at,
-                stars=match_dto.stars,
-                hltv_id=match_dto.id,
-                href=match_dto.href
-            )
+        event = self.event_creator.create(title=match_dto.event)
+        match_kind = self.match_kind_creator.create(title=match_dto.type)
 
-            self.db.commit(flush=True)
-            self.logger.info(f'Added {match_dto.looser.title} vs {match_dto.winner.title}')
-        except Exception as e:
-            self.logger.error(f'{e}', exc_info=True)
-            self.db.rollback()
+        match = self.match_creator.create(
+            team_won=team_winner,
+            team_lose=team_looser,
+            match_kind=match_kind,
+            event=event,
+
+            won_score=int(match_dto.winner.score),
+            lose_score=int(match_dto.looser.score),
+            played_at=match_dto.played_at,
+            stars=match_dto.stars,
+            hltv_id=match_dto.id,
+            href=match_dto.href
+        )
+
+        self.logger.info(f'Added {match_dto.looser.title} vs {match_dto.winner.title}')
+        self.db.flush()
 
     def process_to_create(self, list_of_dtos: List[MatchDTO]):
         for dto in list_of_dtos:

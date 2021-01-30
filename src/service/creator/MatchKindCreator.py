@@ -13,7 +13,7 @@ class MatchKindCreator(DBAbstract):
         self.repository = MatchKindRepository()
 
     @strict
-    def create(self, title: str, commit: bool = False) -> MatchKindModel:
+    def create(self, title: str) -> MatchKindModel:
         assert title != '', 'Match kind name doesnt be empty'
 
         match_kind_model = self.repository.get_by_title(title=title)
@@ -23,9 +23,6 @@ class MatchKindCreator(DBAbstract):
         match_kind_model = MatchKindModel()
         match_kind_model.title = title
 
-        self.db.add_model(match_kind_model, need_flush=True)
-
-        if commit:
-            self.db.commit()
+        self.db.add_model(match_kind_model)
 
         return match_kind_model
