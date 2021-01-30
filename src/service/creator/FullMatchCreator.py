@@ -1,7 +1,4 @@
-import json
-import sys
 from typing import List
-import traceback
 
 from src.abstract.DBAbstract import DBAbstract
 from src.abstract.LoggerAbstract import LoggerAbstract
@@ -41,25 +38,26 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
             country_looser = self.country_creator.create(
                 title=match_dto.looser.country,
                 image_url=match_dto.looser.country_image_url,
+                commit=True,
             )
-            self.db.commit(flush=True)
 
             country_winner = self.country_creator.create(
                 title=match_dto.winner.country,
                 image_url=match_dto.winner.country_image_url,
+                commit=True,
             )
-            self.db.commit(flush=True)
-
-            event = self.event_creator.create(title=match_dto.event)
+            event = self.event_creator.create(title=match_dto.event, commit=True)
             team_looser = self.team_creator.create(
                 title=match_dto.looser.title,
                 country=country_looser,
-                image_url=match_dto.looser.image_url
+                image_url=match_dto.looser.image_url,
+                commit=True,
             )
             team_winner = self.team_creator.create(
                 title=match_dto.winner.title,
                 country=country_winner,
-                image_url=match_dto.winner.image_url
+                image_url=match_dto.winner.image_url,
+                commit=True,
             )
 
             match_kind = self.match_kind_creator.create(title=match_dto.type)
