@@ -1,25 +1,29 @@
 from src.helpers.string import StringHelper
+from src.repository.MatchRepository import MatchRepository
 from src.service.parser.CreateMatchDTOFromUrl import CreateMatchDTOFromUrl
 
 
 class HTMLMatchesToListDtoConverter:
     create_match_dto_from_url: CreateMatchDTOFromUrl
+    match_repository: MatchRepository
 
     def __init__(self):
         super().__init__()
         self.create_match_dto_from_url = CreateMatchDTOFromUrl()
+        self.match_repository = MatchRepository()
 
-    def get_list_of_dto(self, html_matches: list, hltv_ids_added_today: list) -> list:
+
+    def get_list_of_dto(self, html_matches: list) -> list:
         result = []
-        list_ids = [item.hltv_id for item in hltv_ids_added_today]
 
         if len(html_matches) == 0:
             return []
 
         for item in html_matches:
             href = item.find('a', {'class': 'a-reset'})['href']
+            match_id = StringHelper.get_match_id_from_url(href)
 
-            if StringHelper.search_list_id_in_string(list_ids=list_ids, string=href):
+            if self.match_repository.get_by_hltv_id(match_id):
                 continue
 
             match_dto = self.create_match_dto_from_url.create(href=href)
