@@ -14,21 +14,27 @@ class ParseMatchesHTML(LoggerAbstract):
         self.http_client_service = HttpClientService()
         self.config = ConfigService()
 
-    def get_matches(self, all_in_page=False) -> list:
-        text = self.http_client_service.get_html_page(self.config.get_hltv_result_endpoint())
-        self.logger.info(f'Opened {self.config.get_hltv_result_endpoint()}')
+    def get_matches(self, page: int = None) -> list:
+        result = []
+
+        link = self._get_link(page)
+        text = self.http_client_service.get_html_page(link)
+        self.logger.info(f'Opened {link}')
 
         soup = BeautifulSoup(text, "html.parser")
-        matches = soup.find_all('div', {'data-zonedgrouping-headline-classes': 'standard-headline'})
 
-        if len(matches):
-            result = []
-            if all_in_page:
-                matches_list = matches[0].find_all('div', {'class': 'results-sublist'})
-                for i in range(0, len(matches_list)-1):
-                    result = result + matches_list[i].find_all('div', {'class': 'result-con'})
-                return result
-            else:
-                matches_list = matches[0].find_all('div', {'class': 'results-sublist'})
-                return matches_list[0].find_all('div', {'class': 'result-con'})
-        return []
+        if page is None:
+            matches = soup.find_all('div', {'data-zonedgrouping-headline-classes': 'standard-headline'})
+            matches_list = matches[0].find_all('div', {'class': 'results-sublist'})
+            for i in range(0, len(matches_list) - 1):
+                result = result + matches_list[i].find_all('div', {'class': 'result-con'})
+            return result
+
+        if page:
+            return soup.find_all('div', {'class': 'result-con', 'data-zonedgrouping-entry-unix': True})
+
+    def _get_link(self, page: int = None) -> str:
+        offset = ''
+        if page > 1:
+            offset = f'?offset={(page - 1) * 100}'
+        return f'{self.config.get_hltv_result_endpoint()}{offset}'
