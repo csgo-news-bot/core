@@ -17,7 +17,7 @@ class TeamCreator(DBAbstract):
         self.image_google_cloud_creator = ImageGoogleCloudCreator()
 
     @strict
-    def create(self, title: str, country: CountryModel, image_url, commit: bool = False) -> TeamModel:
+    def create(self, title: str, country: CountryModel, image_url) -> TeamModel:
         assert title != '', 'Team name doesnt be empty'
 
         team_model = self.repository.get_by_title(title=title)
@@ -36,9 +36,6 @@ class TeamCreator(DBAbstract):
             )
             team_model.image = img_filename
 
-        self.db.add_model(team_model, need_flush=True)
-
-        if commit:
-            self.db.commit()
+        self.db.add_model(team_model)
 
         return team_model

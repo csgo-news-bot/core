@@ -1,31 +1,35 @@
 from logging import getLogger
 from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError, DataError
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
-from src.models import BaseModel
+from src.models import BaseModel, Base
 from src.service.ConfigService import ConfigService
 
 log = getLogger()
 
 
 class DBSession:
-    _session: Session
+    _session = None
+    _config: ConfigService
 
     def __init__(self):
-        self.config = ConfigService()
-
-        session_class = sessionmaker(
-            bind=create_engine(
-                "postgresql+psycopg2://{}:{}@{}/{}".format(
-                    self.config.get_db_user(),
-                    self.config.get_db_pass(),
-                    self.config.get_db_host(),
-                    self.config.get_db_table(),
-                )
-            )
+        self._config = ConfigService()
+        engine = create_engine(
+            "postgresql+psycopg2://{}:{}@{}/{}".format(
+                self._config.get_db_user(),
+                self._config.get_db_pass(),
+                self._config.get_db_host(),
+                self._config.get_db_table(),
+            ),
+            pool_recycle=3600,
+            echo=False
         )
-        self._session = session_class()
+        Base.metadata.create_all(engine)
+
+        session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+
+        self._session = session()
 
     def add_model(self, model: BaseModel, need_flush: bool = False):
         self._session.add(model)
@@ -67,6 +71,12 @@ class DBSession:
 
         if need_close:
             self.close()
+
+    def flush(self):
+        self._session.flush()
+
+    def close_session(self):
+        self._session.close()
 
     def close(self):
         try:

@@ -37,9 +37,6 @@ class CountryCreator(DBAbstract):
         country_model.short = short
         country_model.image = img_filename
 
-        self.db.add_model(country_model, need_flush=True)
-
-        if commit:
-            self.db.commit()
+        self.db.add_model(country_model)
 
         return country_model
