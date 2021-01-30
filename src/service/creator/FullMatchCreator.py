@@ -73,7 +73,7 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
         )
 
         self.logger.info(f'Added {match_dto.looser.title} vs {match_dto.winner.title}')
-        self.db.flush()
+        self.db.commit(flush=True)
 
     def process_to_create(self, list_of_dtos: List[MatchDTO]):
         for dto in list_of_dtos:
