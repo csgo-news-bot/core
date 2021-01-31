@@ -25,7 +25,7 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
         self.match_creator = MatchCreator()
         self.match_kind_creator = MatchKindCreator()
 
-    def create_from_match_dto(self, match_dto: MatchDTO):
+    def create_from_match_dto(self, match_dto: MatchDTO, default_published_match: bool = None):
         country_looser = self.country_creator.create(
             title=match_dto.looser.country,
             image_url=match_dto.looser.country_image_url,
@@ -61,12 +61,13 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
             played_at=match_dto.played_at,
             stars=match_dto.stars,
             hltv_id=match_dto.id,
-            href=match_dto.href
+            href=match_dto.href,
+            published=default_published_match
         )
 
         self.logger.info(f'Added {match_dto.looser.title} vs {match_dto.winner.title}')
         self.db.commit(flush=True)
 
-    def process_to_create(self, list_of_dtos: List[MatchDTO]):
+    def process_to_create(self, list_of_dtos: List[MatchDTO], default_published_match: bool = None):
         for dto in list_of_dtos:
-            self.create_from_match_dto(dto)
+            self.create_from_match_dto(dto, default_published_match=default_published_match)
