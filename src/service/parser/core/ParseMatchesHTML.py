@@ -35,6 +35,6 @@ class ParseMatchesHTML(LoggerAbstract):
 
     def _get_link(self, page: int = None) -> str:
         offset = ''
-        if page > 1:
+        if page is not None and page > 1:
             offset = f'?offset={(page - 1) * 100}'
         return f'{self.config.get_hltv_result_endpoint()}{offset}'
