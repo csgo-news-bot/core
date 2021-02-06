@@ -15,7 +15,7 @@ class Logger:
             cls._instance = logging.getLogger('app')
             cls._instance.setLevel(logging.DEBUG)
 
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            formatter = logging.Formatter('%(asctime)s: [%(threadName)s] - %(name)s - %(levelname)s - %(message)s')
 
             log_handler = handlers.StreamHandler(stream=sys.stdout)
             log_handler.setFormatter(formatter)
