@@ -64,7 +64,7 @@ class FullMatchCreator(DBAbstract, LoggerAbstract):
             href=match_dto.href,
             published=default_published_match
         )
-
+        self.db.close_session()
         self.logger.info(f'Added {match_dto.looser.title} vs {match_dto.winner.title}')
 
     def process_to_create(self, list_of_dtos: List[MatchDTO], default_published_match: bool = None):
