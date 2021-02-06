@@ -51,10 +51,7 @@ class CreateMatchDTOFromUrl(LoggerAbstract):
         team_dto.title = team.find("img", {"class": "logo"})['title']
         team_dto.country = team.find("img", {"class": ["team1", "team2"]})['title']
         team_dto.country_image_url = team.find("img", {"class": ["team1", "team2"]})['src']
-        team_dto.image_url = team.find("img", {"class": "logo"})['src']
-
-        if team_dto.image_url == 'https://static.hltv.org/images/team/logo/0':
-            team_dto.image_url = None
+        team_dto.set_image_url(team.find("img", {"class": "logo"})['src'])
 
         return team_dto
 
