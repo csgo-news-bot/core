@@ -36,6 +36,6 @@ class TeamCreator(DBAbstract):
             )
             team_model.image = img_filename
 
-        self.db.add_model(team_model)
+        self.db.add_model(team_model, need_flush=True)
 
         return team_model

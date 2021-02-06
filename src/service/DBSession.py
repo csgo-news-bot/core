@@ -21,7 +21,7 @@ class DBSession:
                 self._config.get_db_pass(),
                 self._config.get_db_host(),
                 self._config.get_db_table(),
-                pool_pre_ping=True
+                pool_pre_ping=True,
             ),
             pool_recycle=600,
         )

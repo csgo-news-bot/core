@@ -41,6 +41,6 @@ class MatchCreator(DBAbstract):
         match_model.href = href
         match_model.published = published
 
-        self.db.add_model(match_model)
+        self.db.add_model(match_model, need_flush=True)
 
         return match_model

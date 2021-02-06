@@ -26,6 +26,6 @@ class EventCreator(DBAbstract):
         event_model = EventModel()
         event_model.title = title
 
-        self.db.add_model(event_model)
+        self.db.add_model(event_model, need_flush=True)
 
         return event_model

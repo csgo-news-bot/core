@@ -23,6 +23,6 @@ class MatchKindCreator(DBAbstract):
         match_kind_model = MatchKindModel()
         match_kind_model.title = title
 
-        self.db.add_model(match_kind_model)
+        self.db.add_model(match_kind_model, need_flush=True)
 
         return match_kind_model
