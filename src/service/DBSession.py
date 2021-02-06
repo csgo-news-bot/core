@@ -35,6 +35,7 @@ class DBSession:
         self._session.add(model)
 
         if need_flush:
+            self.commit()
             self._session.flush([model])
 
         return model
