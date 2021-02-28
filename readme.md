@@ -13,7 +13,7 @@ How to create
 
 `alembic revision --autogenerate -m "Migration name"`
 
-How to apply 
+How to apply migrations
 
 `alembic upgrade head`
 
