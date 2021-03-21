@@ -11,12 +11,10 @@ class MatchUpdater(DBAbstract):
         super(MatchUpdater, self).__init__()
         self.repository = MatchRepository()
 
-    def update_publish_by_id(self, match_id: UUID, publish: bool, commit: bool = False):
+    async def update_publish_by_id(self, match_id: UUID, publish: bool, commit: bool = False):
         match_model = self.repository.get_by_id(match_id)
 
         match_model.published = publish
 
         if commit:
-            self.db.commit()
-
-        return match_model
+            await self.db.commit()
