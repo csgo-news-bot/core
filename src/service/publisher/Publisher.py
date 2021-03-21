@@ -1,3 +1,4 @@
+import asyncio
 import time
 
 from src.abstract.DBAbstract import DBAbstract
@@ -29,7 +30,7 @@ class Publisher(LoggerAbstract, DBAbstract):
                     if not self.country_allow_service.is_allow_country(match):
                         self.sender_message.execute(match)
                     await self.match_updater.update_publish_by_id(match_id=match.id, publish=True)
-                    time.sleep(3)
+                    await asyncio.sleep(3)
                 self.db.commit()
                 self.logger.info(f'There are new matches {len(unpublished_matches)}')
             else:
