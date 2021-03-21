@@ -1,20 +1,16 @@
-import threading
-import time
+import asyncio
 
 from src.abstract.LoggerAbstract import LoggerAbstract
 from src.service.publisher.Publisher import Publisher
 
 
-class PublisherThread(threading.Thread, LoggerAbstract):
-    def __init__(self):
-        threading.Thread.__init__(self)
-
-    def run(self):
+class PublisherProcess(LoggerAbstract):
+    async def task(self):
         while True:
             try:
                 publisher = Publisher()
-                publisher.execute()
+                await publisher.execute()
             except Exception as e:
                 self.logger.error(e, exc_info=True)
 
-            time.sleep(1000)  # every 18 min
+            await asyncio.sleep(1000)  # every 18 min

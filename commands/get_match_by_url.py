@@ -10,4 +10,6 @@ if __name__ == "__main__":
     match_dto = a.create('/matches/2346427/paradox-vs-animal-squad-esea-premier-season-36-australia')
     f = FullMatchCreator()
     f.create_from_match_dto(match_dto)
+    import time
+    time.sleep(999999)
 
