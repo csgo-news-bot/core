@@ -29,6 +29,7 @@ class Publisher(LoggerAbstract, DBAbstract):
                 for match in unpublished_matches:
                     if not self.country_allow_service.is_allow_country(match):
                         self.sender_message.execute(match)
+                        self.logger.info(f'Published {match.team_won.title} vs {match.team_lose.title} match')
                     await self.match_updater.update_publish_by_id(match_id=match.id, publish=True)
                     await asyncio.sleep(3)
                 self.db.commit()
