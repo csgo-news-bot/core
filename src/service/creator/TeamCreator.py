@@ -21,10 +21,8 @@ class TeamCreator(DBAbstract):
         assert title != '', 'Team name doesnt be empty'
 
         team_model = self.repository.get_by_title(title=title)
-
-        self.__change_team_country_if_it_changed(team_model, country)
-
         if team_model:
+            self.__change_team_country_if_it_changed(team_model, country)
             return team_model
 
         team_model = TeamModel()
