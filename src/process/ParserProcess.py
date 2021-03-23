@@ -9,7 +9,7 @@ class ParserProcess(LoggerAbstract):
         while True:
             try:
                 parser = HLTVParser()
-                await parser.execute()
+                parser.execute()
             except Exception as e:
                 await self.logger.error(e, exc_info=True)
 
