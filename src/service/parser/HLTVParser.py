@@ -13,7 +13,7 @@ class HLTVParser:
         self.html_matches_converter = HTMLMatchesToListDtoConverter()
         self.full_match_creator = FullMatchCreator()
 
-    async def execute(self, page: int = None, default_published_match: bool = None):
+    def execute(self, page: int = None, default_published_match: bool = None):
         """
         :param page: Parse all matches on page.
                       -  None is latest matches
@@ -27,7 +27,7 @@ class HLTVParser:
         )
 
         if len(dto_list) > 0:
-            await self.full_match_creator.process_to_create(
+            self.full_match_creator.process_to_create(
                 list_of_dtos=dto_list,
                 default_published_match=default_published_match
             )
