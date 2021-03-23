@@ -21,6 +21,9 @@ class TeamCreator(DBAbstract):
         assert title != '', 'Team name doesnt be empty'
 
         team_model = self.repository.get_by_title(title=title)
+
+        self.__change_team_country_if_it_changed(team_model, country)
+
         if team_model:
             return team_model
 
@@ -39,3 +42,8 @@ class TeamCreator(DBAbstract):
         self.db.add_model(team_model, need_flush=True)
 
         return team_model
+
+    def __change_team_country_if_it_changed(self, team_model: TeamModel, country_model: CountryModel):
+        if team_model.country.title != country_model.title:
+            team_model.country = country_model
+            self.db.add_model(team_model, need_flush=True)
