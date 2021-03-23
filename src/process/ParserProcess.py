@@ -11,6 +11,6 @@ class ParserProcess(LoggerAbstract):
                 parser = HLTVParser()
                 await parser.execute()
             except Exception as e:
-                self.logger.error(e, exc_info=True)
+                await self.logger.error(e, exc_info=True)
 
             await asyncio.sleep(600)  # every 10 min
