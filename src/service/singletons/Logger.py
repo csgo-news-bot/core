@@ -1,6 +1,9 @@
+import os
 import sys
 import logging
 import logging as handlers
+
+import tg_logger
 
 
 class Logger:
@@ -21,5 +24,26 @@ class Logger:
             log_handler.setFormatter(formatter)
 
             cls._instance.addHandler(log_handler)
+
+        return cls._instance
+
+
+class TelegramLogger:
+    _instance = None
+
+    def __init__(self):
+        raise RuntimeError('Call instance() instead')
+
+    @classmethod
+    def instance(cls):
+        if cls._instance is None:
+            cls._instance = logging.getLogger('app.tg')
+            cls._instance.setLevel(logging.ERROR)
+
+            tg_logger.setup(
+                cls._instance,
+                token=os.getenv('TELEGRAM_LOGGER_BOT_TOKEN'),
+                users=[int(os.getenv('TELEGRAM_LOGGER_CHAT_ID'))]
+            )
 
         return cls._instance
