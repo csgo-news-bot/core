@@ -2,6 +2,7 @@ import asyncio
 
 from src.abstract.LoggerAbstract import LoggerAbstract
 from src.service.parser.HLTVParser import HLTVParser
+from src.service.singletons.Logger import TelegramLogger
 
 
 class ParserProcess(LoggerAbstract):
@@ -11,6 +12,7 @@ class ParserProcess(LoggerAbstract):
                 parser = HLTVParser()
                 parser.execute()
             except Exception as e:
-                await self.logger.error(e, exc_info=True)
+                self.logger.error(e, exc_info=True)
+                TelegramLogger.instance().error(str(e))
 
             await asyncio.sleep(600)  # every 10 min
