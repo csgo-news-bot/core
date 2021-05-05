@@ -4,17 +4,17 @@ from src.abstract.DBAbstract import DBAbstract
 from src.models import CountryModel
 from src.models.TeamModel import TeamModel
 from src.repository.TeamRepository import TeamRepository
-from src.service.creator.ImageGoogleCloudCreator import ImageGoogleCloudCreator
+from src.service.creator.image_storage_creator import ImageStorageCreator
 
 
 class TeamCreator(DBAbstract):
     repository: TeamRepository
-    image_google_cloud_creator: ImageGoogleCloudCreator
+    image_storage_creator: ImageStorageCreator
 
     def __init__(self):
         super().__init__()
         self.repository = TeamRepository()
-        self.image_google_cloud_creator = ImageGoogleCloudCreator()
+        self.image_storage_creator = ImageStorageCreator()
 
     @strict
     def create(self, title: str, country: CountryModel, image_url) -> TeamModel:
@@ -30,7 +30,7 @@ class TeamCreator(DBAbstract):
         team_model.country = country
 
         if image_url:
-            img_filename = self.image_google_cloud_creator.create(
+            img_filename = self.image_storage_creator.create(
                 image_url=image_url,
                 title=title,
                 folder=TeamModel.google_storage_folder

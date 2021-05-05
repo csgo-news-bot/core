@@ -1,4 +1,5 @@
 class ImageResponseDTO:
-    blob = None
+    blob: bytes = None
     mime = None
     ext = None
+    length: int = None

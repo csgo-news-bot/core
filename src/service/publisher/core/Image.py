@@ -26,19 +26,19 @@ class Image:
             "team_won_score": match.score_won,
             "team_lose_score": match.score_lose,
             "match_type": match.match_kind.title,
-            "team_won_logo_url": ConfigService.get_url_to_google_cloud(
+            "team_won_logo_url": ConfigService.get_url_to_cloud_storage(
                 folder=TeamModel.google_storage_folder,
                 image=match.team_won.image
             ),
-            "team_lose_logo_url": ConfigService.get_url_to_google_cloud(
+            "team_lose_logo_url": ConfigService.get_url_to_cloud_storage(
                 folder=TeamModel.google_storage_folder,
                 image=match.team_lose.image
             ),
-            "team_won_flag_url": ConfigService.get_url_to_google_cloud(
+            "team_won_flag_url": ConfigService.get_url_to_cloud_storage(
                 folder=CountryModel.google_storage_folder,
                 image=match.team_won.country.image
             ),
-            "team_lose_flag_url": ConfigService.get_url_to_google_cloud(
+            "team_lose_flag_url": ConfigService.get_url_to_cloud_storage(
                 folder=CountryModel.google_storage_folder,
                 image=match.team_lose.country.image
             )

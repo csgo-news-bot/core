@@ -13,11 +13,11 @@ sqlalchemy = "*"
 psycopg2-binary = "*"
 alembic = "*"
 selenium = "*"
-google-cloud-storage = "*"
 strict-hint = "*"
 jinja2 = "*"
 asyncio = "*"
 tg-logger = "*"
+minio = "*"
 
 [requires]
 python_version = "3.9.1"
