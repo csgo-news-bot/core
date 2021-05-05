@@ -3,17 +3,17 @@ from strict_hint import strict
 from src.abstract.DBAbstract import DBAbstract
 from src.models import EventModel
 from src.repository.EventRepository import EventRepository
-from src.service.creator.ImageGoogleCloudCreator import ImageGoogleCloudCreator
+from src.service.creator.image_storage_creator import ImageStorageCreator
 
 
 class EventCreator(DBAbstract):
     repository: EventRepository
-    image_google_cloud_creator: ImageGoogleCloudCreator
+    image_storage_creator: ImageStorageCreator
 
     def __init__(self):
         super().__init__()
         self.repository = EventRepository()
-        self.image_google_cloud_creator = ImageGoogleCloudCreator()
+        self.image_storage_creator = ImageStorageCreator()
 
     @strict
     def create(self, title: str) -> EventModel:

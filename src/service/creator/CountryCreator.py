@@ -4,18 +4,18 @@ from src.abstract.DBAbstract import DBAbstract
 from src.models import CountryModel
 from src.repository.CountryRepository import CountryRepository
 from src.service.ConfigService import ConfigService
-from src.service.creator.ImageGoogleCloudCreator import ImageGoogleCloudCreator
+from src.service.creator.image_storage_creator import ImageStorageCreator
 
 
 class CountryCreator(DBAbstract):
     repository: CountryRepository
-    image_google_cloud_creator: ImageGoogleCloudCreator
+    image_storage_creator: ImageStorageCreator
     config: ConfigService
 
     def __init__(self):
         super().__init__()
         self.repository = CountryRepository()
-        self.image_google_cloud_creator = ImageGoogleCloudCreator()
+        self.image_storage_creator = ImageStorageCreator()
         self.config = ConfigService()
 
     @strict
@@ -26,7 +26,7 @@ class CountryCreator(DBAbstract):
         if country_model:
             return country_model
 
-        img_filename = self.image_google_cloud_creator.create(
+        img_filename = self.image_storage_creator.create(
             image_url=self.config.HLTV_SITE + image_url,
             title=title,
             folder=CountryModel.google_storage_folder

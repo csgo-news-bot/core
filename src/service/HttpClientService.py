@@ -20,5 +20,6 @@ class HttpClientService:
         result.blob = req.content
         result.mime = req.headers['content-type']
         result.ext = StringHelper.get_extension_from_url(url)
+        result.length = int(req.headers['content-length'])
         return result
 
